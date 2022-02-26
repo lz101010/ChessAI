@@ -16,6 +16,8 @@ jobs:
       with:
         java-version: 11
         distribution: temurin
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
     - run: echo "🖥️ The workflow is now ready to test your code on the runner."
 
     - name: Execute Gradle build
