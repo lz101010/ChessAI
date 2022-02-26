@@ -8,6 +8,9 @@ plugins {
     // pretty print tests
     id("com.adarshr.test-logger") version "3.1.0"
 
+    // test coverage
+    jacoco
+
     // add support for building a CLI application
     application
 }
@@ -26,7 +29,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "com.lz101010.AppKt"
+    mainClass.set("com.lz101010.AppKt")
 }
 
 tasks.test {
@@ -36,4 +39,15 @@ tasks.test {
 configure<TestLoggerExtension> {
     theme = ThemeType.MOCHA
     logLevel = LogLevel.LIFECYCLE
+}
+
+tasks.jacocoTestReport {
+    reports {
+        csv.isEnabled = true
+        html.isEnabled = false
+        xml.isEnabled = false
+
+        csv.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.csv"))
+    }
+    dependsOn(tasks.check)
 }
