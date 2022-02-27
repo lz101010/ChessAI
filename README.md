@@ -1,5 +1,6 @@
 ![Build Status](https://github.com/lz101010/ChessAI/actions/workflows/gradle.yml/badge.svg)
 [![Test Coverage](.github/badges/jacoco.svg)](https://github.com/lz101010/ChessAI/actions/workflows/gradle.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Chess AI :crown:
 

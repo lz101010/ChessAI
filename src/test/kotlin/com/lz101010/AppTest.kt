@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2022 Lukas Zeller
+
 package com.lz101010
 
 import org.assertj.core.api.Assertions.assertThat
