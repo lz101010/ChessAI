@@ -49,11 +49,10 @@ configure<TestLoggerExtension> {
 
 tasks.jacocoTestReport {
     reports {
-        csv.isEnabled = true
+        csv.isEnabled = false
         html.isEnabled = false
         xml.isEnabled = true
 
-        csv.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.csv"))
         xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
     }
     dependsOn(tasks.check)
