@@ -23,9 +23,15 @@ class BoardTest {
 
     @Test
     fun equality_passes() {
-        assertThat(Board()).isEqualTo(Board())
-        assertThat(Board().hashCode()).isEqualTo(Board().hashCode())
+        val board1 = Board()
+        val board2 = Board()
+        assertThat(board1).isEqualTo(board1)
+        assertThat(board1).isEqualTo(board2)
+        assertThat(board1.hashCode()).isEqualTo(board2.hashCode())
 
+        assertThat(board1).isNotEqualTo(PieceType.B)
+        assertThat(board1).isNotEqualTo(Board.empty)
+        assertThat(board1).isNotEqualTo(null)
         assertThat(Board(whiteToMove = true)).isNotEqualTo(Board(whiteToMove = false))
         assertThat(Board(whiteToMove = true).hashCode()).isNotEqualTo(Board(whiteToMove = false).hashCode())
     }
