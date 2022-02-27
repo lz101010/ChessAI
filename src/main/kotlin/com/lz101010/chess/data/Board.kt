@@ -1,0 +1,56 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2022 Lukas Zeller
+
+package com.lz101010.chess.data
+
+import com.lz101010.chess.data.PieceType.R
+import com.lz101010.chess.data.PieceType.N
+import com.lz101010.chess.data.PieceType.B
+import com.lz101010.chess.data.PieceType.P
+import com.lz101010.chess.data.PieceType.Q
+import com.lz101010.chess.data.PieceType.K
+import java.util.*
+
+private val INITIAL_BOARD_LAYOUT = arrayOf(
+    arrayOf(R.asBlack, N.asBlack, B.asBlack, Q.asBlack, K.asBlack, B.asBlack, N.asBlack, R.asBlack),
+    arrayOf(P.asBlack, P.asBlack, P.asBlack, P.asBlack, P.asBlack, P.asBlack, P.asBlack, P.asBlack),
+    arrayOf<Piece?>(null, null, null, null, null, null, null, null),
+    arrayOf<Piece?>(null, null, null, null, null, null, null, null),
+    arrayOf<Piece?>(null, null, null, null, null, null, null, null),
+    arrayOf<Piece?>(null, null, null, null, null, null, null, null),
+    arrayOf(P.asWhite, P.asWhite, P.asWhite, P.asWhite, P.asWhite, P.asWhite, P.asWhite, P.asWhite),
+    arrayOf(R.asWhite, N.asWhite, B.asWhite, Q.asWhite, K.asWhite, B.asWhite, N.asWhite, R.asWhite)
+)
+
+data class Board(
+    val pieces: Array<Array<out Piece?>> = INITIAL_BOARD_LAYOUT,
+    val whiteToMove: Boolean = true
+) {
+    fun evalScore(): Int {
+        return pieces.flatten()
+            .filterNotNull()
+            .filter { whiteToMove == it.white }
+            .sumOf { it.value }
+    }
+
+    operator fun get(field: Field): Piece? {
+        val row = field.ordinal / 8
+        val col = field.ordinal % 8
+        return pieces[row][col]
+    }
+
+    override fun toString(): String {
+        return pieces.joinToString("\n") { row -> row.joinToString(" ") { it?.basic ?: "-" } }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        return pieces.contentDeepEquals((other as Board).pieces) && whiteToMove == other.whiteToMove
+    }
+
+    override fun hashCode(): Int {
+        return Objects.hash(pieces.contentDeepHashCode(), whiteToMove)
+    }
+}
