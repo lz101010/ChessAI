@@ -1,5 +1,5 @@
 ![Build Status](https://github.com/lz101010/ChessAI/actions/workflows/gradle.yml/badge.svg)
-[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=lz101010_ChessAI&metric=coverage)](https://sonarcloud.io/dashboard?id=lz101010_ChessAI)
+[![Test Coverage](.github/badges/jacoco.svg)](https://github.com/lz101010/ChessAI/actions/workflows/gradle.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Chess AI :crown:

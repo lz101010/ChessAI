@@ -52,6 +52,12 @@ jobs:
       with:
         generate-branches-badge: true
         jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+    - name: Commit and push the badge (if it changed)
+      uses: EndBug/add-and-commit@v7
+      with:
+        default_author: github_actions
+        message: ':memo: commit JaCoCo badge'
+        add: '*.svg'
     - name: Log coverage percentage
       run: echo "📈 coverage = ${{ steps.jacoco.outputs.coverage }}, branches = ${{ steps.jacoco.outputs.branches }}"
 
@@ -63,5 +69,19 @@ jobs:
         -Dsonar.organization=lz101010 
         -Dsonar.projectKey=lz101010_ChessAI
         -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+
+    - name: Get branch name
+      id: branch-name
+      uses: tj-actions/branch-names@v5.1
+    - name: print to file
+      run: |
+        echo "![Test Coverage](https://raw.githubusercontent.com/${{ github.repository }}/${{ steps.branch-name.outputs.current_branch }}/.github/badges/jacoco.svg)" > .github/badges/jacoco.md
+        echo "![Branch Coverage](https://raw.githubusercontent.com/${{ github.repository }}/${{ steps.branch-name.outputs.current_branch }}/.github/badges/branches.svg)" >> .github/badges/jacoco.md
+    - name: Add Coverage PR Comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: github.event_name == 'pull_request'
+      with:
+        recreate: true
+        path: .github/badges/jacoco.md
 
     - run: echo "🍏 This job's status is ${{ job.status }}."
