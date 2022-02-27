@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2022 Lukas Zeller
+
+name: Configure Java 11 JDK and Gradle
+
+runs:
+  using: composite
+  steps:
+    - name: Configure Java 11 JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: 11
+        distribution: temurin
+
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+      shell: bash
+
+    - name: Finalize
+      run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      shell: bash
