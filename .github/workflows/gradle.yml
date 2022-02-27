@@ -50,10 +50,11 @@ jobs:
       run: echo "📈 coverage = ${{ steps.jacoco.outputs.coverage }}, branches = ${{ steps.jacoco.outputs.branches }}"
 
     - name: SonarQube Scan
-      if: github.ref != 'refs/heads/master'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: >-
-        ./gradlew sonarqube 
-        -Dsonar.login=${{ secrets.SONAR_TOKEN }} 
+        ./gradlew sonarqube
         -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} 
         -Dsonar.organization=lz101010 
         -Dsonar.projectKey=lz101010_ChessAI
