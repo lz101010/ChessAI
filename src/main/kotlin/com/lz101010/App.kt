@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2022 Lukas Zeller
+
 package com.lz101010
 
 class App {
@@ -7,6 +10,6 @@ class App {
         }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     println(App().greeting)
 }

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2022 Lukas Zeller
+
 import com.adarshr.gradle.testlogger.TestLoggerExtension
 import com.adarshr.gradle.testlogger.theme.ThemeType
 
@@ -7,6 +10,12 @@ plugins {
 
     // pretty print tests
     id("com.adarshr.test-logger") version "3.1.0"
+
+    // test coverage
+    jacoco
+
+    // code quality
+    id("org.sonarqube") version "3.3"
 
     // add support for building a CLI application
     application
@@ -26,7 +35,7 @@ dependencies {
 }
 
 application {
-    mainClassName = "com.lz101010.AppKt"
+    mainClass.set("com.lz101010.AppKt")
 }
 
 tasks.test {
@@ -36,4 +45,16 @@ tasks.test {
 configure<TestLoggerExtension> {
     theme = ThemeType.MOCHA
     logLevel = LogLevel.LIFECYCLE
+}
+
+tasks.jacocoTestReport {
+    reports {
+        csv.isEnabled = true
+        html.isEnabled = false
+        xml.isEnabled = true
+
+        csv.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.csv"))
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
+    }
+    dependsOn(tasks.check)
 }
