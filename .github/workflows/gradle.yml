@@ -31,15 +31,12 @@ jobs:
     - name: ✅ Determine Test Coverage
       uses: ./.github/actions/test-coverage
 
-    - name: SonarQube Scan
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: >-
-        ./gradlew sonarqube
-        -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} 
-        -Dsonar.organization=lz101010 
-        -Dsonar.projectKey=lz101010_ChessAI
-        -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+    - name: 🔍️ SonarQube Scan
+      uses: ./.github/actions/sonar
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        sonar_token: ${{ secrets.SONAR_TOKEN }}
+        sonar_host_url: ${{ secrets.SONAR_HOST_URL }}
 
-    - run: echo "🍏 This job's status is ${{ job.status }}."
+    - name: 🚀 Finalize
+      run: echo "🍏 This job's status is ${{ job.status }}."

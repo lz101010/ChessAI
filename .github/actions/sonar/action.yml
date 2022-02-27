@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2022 Lukas Zeller
+
+name: Run SonarQube Scan
+
+inputs:
+  github_token:
+    description: GitHub Token
+    required: true
+  sonar_token:
+    description: Sonar Token
+    required: true
+  sonar_host_url:
+    description: Sonar Host URL
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: SonarQube Scan
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        SONAR_TOKEN: ${{ inputs.sonar_token }}
+      run: >-
+        ./gradlew sonarqube
+        -Dsonar.host.url=${{ inputs.sonar_host_url }} 
+        -Dsonar.organization=lz101010 
+        -Dsonar.projectKey=lz101010_ChessAI
+        -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+      shell: bash
