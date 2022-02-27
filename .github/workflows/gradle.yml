@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🎉 Start CI
-      run: echo "🐧 Triggered by a ${{ github.event_name }}, running on ${{ runner.os }}."
+      run: echo "🐧 Triggered by ${{ github.event_name }} event, running on ${{ runner.os }}."
 
     - name: ⤵️ Check out repository code
       uses: actions/checkout@v2
@@ -22,10 +22,10 @@ jobs:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
 
-    - name: 🔧 Configure Java 11 JDK and Gradle
+    - name: 🔧 Configure Java and Gradle
       uses: ./.github/actions/setup-java-gradle
 
-    - name: 🔨 Execute Gradle build
+    - name: 🔨 Run Gradle build
       run: ./gradlew build
 
     - name: ✅ Determine Test Coverage
@@ -39,4 +39,4 @@ jobs:
         sonar_host_url: ${{ secrets.SONAR_HOST_URL }}
 
     - name: 🚀 Finalize
-      run: echo "🍏 This job's status is ${{ job.status }}."
+      run: echo "💚 This job's status is ${{ job.status }}."
