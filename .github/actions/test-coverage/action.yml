@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2022 Lukas Zeller
+
+name: Determine Test Coverage
+
+runs:
+  using: composite
+  steps:
+    - name: Run JaCoCo
+      run: ./gradlew jacocoTestReport
+      shell: bash
+
+    - name: Upload JaCoCo report
+      uses: actions/upload-artifact@v2
+      with:
+        name: jacoco-report
+        path: build/reports/jacoco/test
+
+    - name: Finalize
+      run: |
+        echo "✅ Generated Test Coverage Report(s), located at"
+        find . | grep "jacocoTestReport"
+      shell: bash

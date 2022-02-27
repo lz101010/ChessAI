@@ -13,6 +13,7 @@ plugins {
 
     // test coverage
     jacoco
+    id("org.barfuin.gradle.jacocolog") version "1.2.4"
 
     // code quality
     id("org.sonarqube") version "3.3"

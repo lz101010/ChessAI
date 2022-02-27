@@ -25,21 +25,11 @@ jobs:
     - name: 🔧 Configure Java 11 JDK and Gradle
       uses: ./.github/actions/setup-java-gradle
 
-    - name: Execute Gradle build
+    - name: 🔨 Execute Gradle build
       run: ./gradlew build
-    - name: Determine Test Coverage
-      run: ./gradlew jacocoTestReport
-    - name: Upload Jacoco coverage report
-      uses: actions/upload-artifact@v2
-      with:
-        name: jacoco-report
-        path: build/reports/jacoco/test
-    - run: |
-        echo "✅ Generated Test Coverage Report(s), located at"
-        find . | grep "jacocoTestReport"
-      
-    - name: Log coverage percentage
-      run: echo "📈 coverage = ${{ steps.jacoco.outputs.coverage }}, branches = ${{ steps.jacoco.outputs.branches }}"
+
+    - name: ✅ Determine Test Coverage
+      uses: ./.github/actions/test-coverage
 
     - name: SonarQube Scan
       env:
