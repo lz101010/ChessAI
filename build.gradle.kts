@@ -47,6 +47,10 @@ configure<TestLoggerExtension> {
     logLevel = LogLevel.LIFECYCLE
 }
 
+jacoco {
+    toolVersion = "0.8.7"
+}
+
 tasks.jacocoTestReport {
     reports {
         csv.isEnabled = true
