@@ -14,6 +14,9 @@ plugins {
     // test coverage
     jacoco
 
+    // code quality
+    id("org.sonarqube") version "3.3"
+
     // add support for building a CLI application
     application
 }
@@ -48,9 +51,10 @@ tasks.jacocoTestReport {
     reports {
         csv.isEnabled = true
         html.isEnabled = false
-        xml.isEnabled = false
+        xml.isEnabled = true
 
         csv.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.csv"))
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
     }
     dependsOn(tasks.check)
 }

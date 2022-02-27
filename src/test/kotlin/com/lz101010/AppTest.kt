@@ -16,6 +16,6 @@ class AppTest {
 
     @Test
     fun mainCanBeCalled() {
-        assertDoesNotThrow { main(arrayOf("foo", "bar")) }
+        assertDoesNotThrow { main() }
     }
 }

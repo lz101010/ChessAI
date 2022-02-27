@@ -19,6 +19,9 @@ jobs:
 
     - name: Check out repository code
       uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
     - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
 
     - name: Configure Java 11 JDK
@@ -40,8 +43,8 @@ jobs:
         name: jacoco-report
         path: build/reports/jacoco/test
     - run: |
-        echo "✅ Generated Test Coverage Report, located at"
-        find . | grep "jacocoTestReport.csv"
+        echo "✅ Generated Test Coverage Report(s), located at"
+        find . | grep "jacocoTestReport"
       
     - name: Generate JaCoCo Badge
       id: jacoco
@@ -57,5 +60,15 @@ jobs:
         add: '*.svg'
     - name: Log coverage percentage
       run: echo "📈 coverage = ${{ steps.jacoco.outputs.coverage }}, branches = ${{ steps.jacoco.outputs.branches }}"
+
+    - name: SonarQube Scan
+      run: >-
+        ./gradlew sonarqube 
+        -Dsonar.login=${{ secrets.SONAR_TOKEN }} 
+        -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} 
+        -Dsonar.organization=lz101010 
+        -Dsonar.projectKey=lz101010_ChessAI
+        -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+        --info
 
     - run: echo "🍏 This job's status is ${{ job.status }}."
