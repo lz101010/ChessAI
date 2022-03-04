@@ -10,6 +10,8 @@ import com.lz101010.chess.data.PieceType.P
 import com.lz101010.chess.data.PieceType.Q
 import com.lz101010.chess.data.PieceType.K
 import java.util.*
+import java.util.EnumSet.allOf
+import java.util.EnumSet.noneOf
 
 private val INITIAL_BOARD_LAYOUT = arrayOf(
     arrayOf<Piece?>(R.asBlack, N.asBlack, B.asBlack, Q.asBlack, K.asBlack, B.asBlack, N.asBlack, R.asBlack),
@@ -35,7 +37,11 @@ private val EMPTY_BOARD_LAYOUT = arrayOf(
 
 data class Board(
     val pieces: Array<Array<Piece?>> = INITIAL_BOARD_LAYOUT,
-    val whiteToMove: Boolean = true
+    val whiteToMove: Boolean = true,
+    val castlingOptions: Collection<CastlingOption> = allOf(CastlingOption::class.java),
+    val plies: UInt = 0u,
+    val nextMove: UInt = 1u,
+    val enPassant: EnPassantOption? = null
 ) {
     companion object {
         var empty = Board(pieces = EMPTY_BOARD_LAYOUT)

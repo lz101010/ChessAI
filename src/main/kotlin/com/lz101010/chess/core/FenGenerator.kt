@@ -29,27 +29,14 @@ object FenGenerator {
             .replace("-", "1")
     }
 
-    private fun group2(board: Board): String {
-        return if (board.whiteToMove) "w" else "b"
-    }
+    private fun group2(board: Board): String = if (board.whiteToMove) "w" else "b"
 
-    private fun group3(board: Board): String {
-        // TODO revisit: "K" = white king-side castling, "q" = black queen-side castling, "-" = no castling, etc.
-        return "KQkq"
-    }
+    private fun group3(board: Board): String =
+        board.castlingOptions.map { it.description }.sorted().joinToString("").ifBlank { "-" }
 
-    private fun group4(board: Board): String {
-        // TODO revisit: possible en-passant
-        return "-"
-    }
+    private fun group4(board: Board): String = board.enPassant?.name?.lowercase() ?: "-"
 
-    private fun group5(board: Board): String {
-        // TODO revisit: number of plies
-        return "0"
-    }
+    private fun group5(board: Board): String = "${board.plies}"
 
-    private fun group6(board: Board): String {
-        // TODO revisit: next move
-        return "1"
-    }
+    private fun group6(board: Board): String = "${board.nextMove}"
 }

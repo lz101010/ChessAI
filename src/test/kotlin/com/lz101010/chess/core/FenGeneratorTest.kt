@@ -26,6 +26,16 @@ class FenGeneratorTest {
         val boardAfterE4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.E2, to = Square.E4))
 
         assertThat(FenGenerator.generate(boardAfterE4))
-            .isEqualTo("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")
+            .isEqualTo("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 1 1")
+    }
+
+    @Test
+    fun e4e5Fen_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.E2, to = Square.E4))
+        val boardAfterE5 = MoveMaker.move(boardAfterE4, Move(PieceType.P.asBlack, from = Square.E7, to = Square.E5))
+
+        assertThat(FenGenerator.generate(boardAfterE5))
+            .isEqualTo("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 2 2")
     }
 }

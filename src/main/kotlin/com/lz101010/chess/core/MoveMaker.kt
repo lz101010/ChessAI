@@ -12,7 +12,14 @@ object MoveMaker {
             }.toTypedArray()
         }.toTypedArray()
 
-        return Board(pieces = pieces, whiteToMove = !board.whiteToMove)
+        // TODO: proper implementation of plies, move, castling options, en passant
+        return Board(
+            pieces = pieces,
+            whiteToMove = !board.whiteToMove,
+            castlingOptions = board.castlingOptions,
+            plies = board.plies + 1u,
+            nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u
+        )
     }
 
     private fun validate(board: Board, move: Move) {
