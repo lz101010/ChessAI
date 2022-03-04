@@ -40,6 +40,7 @@ data class Board(
     companion object {
         var empty = Board(pieces = EMPTY_BOARD_LAYOUT)
     }
+
     fun evalScore(): Int {
         return pieces.flatten()
             .filterNotNull()
@@ -47,9 +48,9 @@ data class Board(
             .sumOf { it.value }
     }
 
-    operator fun get(field: Field): Piece? {
-        val row = field.ordinal / 8
-        val col = field.ordinal % 8
+    operator fun get(square: Square): Piece? {
+        val row = 7 - square.rank.ordinal
+        val col = square.file.ordinal
         return pieces[row][col]
     }
 

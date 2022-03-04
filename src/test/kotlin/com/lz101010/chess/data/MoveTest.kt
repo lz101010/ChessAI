@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 class MoveTest {
     @Test
     fun printing_passes() {
-        assertThat(Move(PieceType.P.asBlack, Field.A1, Field.A2).toString()).isEqualTo("a1a2")
-        assertThat(Move(PieceType.Q.asWhite, Field.B7, Field.G3).pretty).isEqualTo("♕b7g3")
+        assertThat(Move(PieceType.P.asBlack, Square.A1, Square.A2).toString()).isEqualTo("a1a2")
+        assertThat(Move(PieceType.Q.asWhite, Square.B7, Square.G3).pretty).isEqualTo("♕b7g3")
     }
 }
