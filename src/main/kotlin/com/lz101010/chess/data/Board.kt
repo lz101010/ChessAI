@@ -48,9 +48,11 @@ data class Board(
             .sumOf { it.value }
     }
 
-    operator fun get(square: Square): Piece? {
-        val row = 7 - square.rank.ordinal
-        val col = square.file.ordinal
+    operator fun get(square: Square): Piece? = get(square.file, square.rank)
+
+    operator fun get(file: File, rank: Rank): Piece? {
+        val row = 7 - rank.ordinal
+        val col = file.ordinal
         return pieces[row][col]
     }
 
