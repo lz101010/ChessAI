@@ -2,6 +2,7 @@
 # Copyright (c) 2022 Lukas Zeller
 
 name: Configure Java 11 JDK and Gradle
+description: Configures Java 11 JDK and Gradle
 
 runs:
   using: composite
