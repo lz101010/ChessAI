@@ -3,11 +3,8 @@
 
 package com.lz101010.chess.core
 
+import com.lz101010.chess.data.*
 import org.assertj.core.api.Assertions.assertThat
-import com.lz101010.chess.data.Board
-import com.lz101010.chess.data.Move
-import com.lz101010.chess.data.PieceType
-import com.lz101010.chess.data.Square
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
@@ -61,5 +58,85 @@ class MoveMakerTest {
         }.let {
             assertThat(it.message).isEqualTo("white to move")
         }
+    }
+
+    @Test
+    fun movePe4Pe5Ke2_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.E2, to = Square.E4))
+        val boardAfterE5 = MoveMaker.move(boardAfterE4, Move(PieceType.P.asBlack, from = Square.E7, to = Square.E5))
+        val boardAfterE2 = MoveMaker.move(boardAfterE5, Move(PieceType.K.asWhite, from = Square.E1, to = Square.E2))
+
+        assertThat(boardAfterE2.castlingOptions)
+            .containsExactlyInAnyOrder(CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
+    }
+
+    @Test
+    fun movePh4Pe5Rh2_passes() {
+        val defaultBoard = Board()
+        val boardAfterH4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.H2, to = Square.H4))
+        val boardAfterE5 = MoveMaker.move(boardAfterH4, Move(PieceType.P.asBlack, from = Square.E7, to = Square.E5))
+        val boardAfterH2 = MoveMaker.move(boardAfterE5, Move(PieceType.R.asWhite, from = Square.H1, to = Square.H2))
+
+        assertThat(boardAfterH2.castlingOptions)
+            .containsExactlyInAnyOrder(CastlingOption.WHITE_Q, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
+    }
+
+    @Test
+    fun movePa4Pe5Ra2_passes() {
+        val defaultBoard = Board()
+        val boardAfterA4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.A2, to = Square.A4))
+        val boardAfterE5 = MoveMaker.move(boardAfterA4, Move(PieceType.P.asBlack, from = Square.E7, to = Square.E5))
+        val boardAfterA2 = MoveMaker.move(boardAfterE5, Move(PieceType.R.asWhite, from = Square.A1, to = Square.A2))
+
+        assertThat(boardAfterA2.castlingOptions)
+            .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
+    }
+
+    @Test
+    fun movePe4Pe5Pd4Ke7_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.E2, to = Square.E4))
+        val boardAfterE5 = MoveMaker.move(boardAfterE4, Move(PieceType.P.asBlack, from = Square.E7, to = Square.E5))
+        val boardAfterD4 = MoveMaker.move(boardAfterE5, Move(PieceType.P.asWhite, from = Square.D2, to = Square.D4))
+        val boardAfterE7 = MoveMaker.move(boardAfterD4, Move(PieceType.K.asBlack, from = Square.E8, to = Square.E7))
+
+        assertThat(boardAfterE7.castlingOptions)
+            .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.WHITE_Q)
+    }
+
+    @Test
+    fun movePe4Ph5Pd4Rh7_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.E2, to = Square.E4))
+        val boardAfterH5 = MoveMaker.move(boardAfterE4, Move(PieceType.P.asBlack, from = Square.H7, to = Square.H5))
+        val boardAfterD4 = MoveMaker.move(boardAfterH5, Move(PieceType.P.asWhite, from = Square.D2, to = Square.D4))
+        val boardAfterH7 = MoveMaker.move(boardAfterD4, Move(PieceType.R.asBlack, from = Square.H8, to = Square.H7))
+
+        assertThat(boardAfterH7.castlingOptions)
+            .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.WHITE_Q, CastlingOption.BLACK_Q)
+    }
+
+    @Test
+    fun movePe4Pa5Pd4Ra7_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.E2, to = Square.E4))
+        val boardAfterA5 = MoveMaker.move(boardAfterE4, Move(PieceType.P.asBlack, from = Square.A7, to = Square.A5))
+        val boardAfterD4 = MoveMaker.move(boardAfterA5, Move(PieceType.P.asWhite, from = Square.D2, to = Square.D4))
+        val boardAfterA7 = MoveMaker.move(boardAfterD4, Move(PieceType.R.asBlack, from = Square.A8, to = Square.A7))
+
+        assertThat(boardAfterA7.castlingOptions)
+            .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.WHITE_Q, CastlingOption.BLACK_K)
+    }
+
+    @Test
+    fun movePe4Pe5Ke2Ke7_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, Move(PieceType.P.asWhite, from = Square.E2, to = Square.E4))
+        val boardAfterE5 = MoveMaker.move(boardAfterE4, Move(PieceType.P.asBlack, from = Square.E7, to = Square.E5))
+        val boardAfterE2 = MoveMaker.move(boardAfterE5, Move(PieceType.K.asWhite, from = Square.E1, to = Square.E2))
+        val boardAfterE7 = MoveMaker.move(boardAfterE2, Move(PieceType.K.asBlack, from = Square.E8, to = Square.E7))
+
+        assertThat(boardAfterE7.castlingOptions).isEmpty()
     }
 }

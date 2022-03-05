@@ -15,11 +15,10 @@ object MoveMaker {
             }.toTypedArray()
         }.toTypedArray()
 
-        // TODO: proper implementation of plies, move, castling options, en passant
         return Board(
             pieces = pieces,
             whiteToMove = !board.whiteToMove,
-            castlingOptions = board.castlingOptions,
+            castlingOptions = updateCastlingOptions(board, move),
             plies = board.plies + 1u,
             nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u
         )
@@ -45,4 +44,31 @@ object MoveMaker {
         }
         return defaultPiece
     }
+
+    private fun updateCastlingOptions(board: Board, move: Move): Collection<CastlingOption> {
+        return when (move.piece.type) {
+            PieceType.R -> rookMoved(move, board)
+            PieceType.K -> kingMoved(move, board)
+            else -> board.castlingOptions
+        }
+    }
+
+    private fun kingMoved(move: Move, board: Board): Collection<CastlingOption> {
+        return if (move.piece.white) {
+            remove(board, CastlingOption.WHITE_K, CastlingOption.WHITE_Q)
+        } else {
+            remove(board, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
+        }
+    }
+
+    private fun rookMoved(move: Move, board: Board): Collection<CastlingOption> {
+        return when (move.from.file) {
+            File.FILE_A -> remove(board, if (move.piece.white) CastlingOption.WHITE_Q else CastlingOption.BLACK_Q)
+            File.FILE_H -> remove(board, if (move.piece.white) CastlingOption.WHITE_K else CastlingOption.BLACK_K)
+            else -> board.castlingOptions
+        }
+    }
+
+    private fun remove(board: Board, vararg castlingOptions: CastlingOption) =
+        board.castlingOptions.filterNot { castlingOptions.contains(it) }
 }

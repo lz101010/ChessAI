@@ -11,7 +11,6 @@ import com.lz101010.chess.data.PieceType.Q
 import com.lz101010.chess.data.PieceType.K
 import java.util.*
 import java.util.EnumSet.allOf
-import java.util.EnumSet.noneOf
 
 private val INITIAL_BOARD_LAYOUT = arrayOf(
     arrayOf<Piece?>(R.asBlack, N.asBlack, B.asBlack, Q.asBlack, K.asBlack, B.asBlack, N.asBlack, R.asBlack),
