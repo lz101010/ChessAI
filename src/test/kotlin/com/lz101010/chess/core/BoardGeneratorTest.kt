@@ -18,6 +18,7 @@ import com.lz101010.chess.support.OpeningMoves
 import com.lz101010.chess.support.move
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class BoardGeneratorTest {
     @Test
@@ -110,6 +111,76 @@ class BoardGeneratorTest {
 
         assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1"))
             .isEqualTo(Board.default.copy(castlingOptions = setOf()))
+    }
+
+    @Test
+    fun defaultBoardFen_withEnPassantOptions_passes() {
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.A3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.A6))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq b3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.B3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq b6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.B6))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.C3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.C6))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq d3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.D3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.D6))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.E3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.E6))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq f3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.F3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq f6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.F6))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq g3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.G3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq g6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.G6))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq h3 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.H3))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq h6 0 1"))
+            .isEqualTo(Board.default.copy(enPassant = EnPassantOption.H6))
+    }
+
+    @Test
+    fun generateFromBadFen_fails() {
+        assertThrows<IllegalArgumentException> { // too many parts
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 b")
+        }
+        assertThrows<IllegalArgumentException> { // too few parts
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 1: missing row
+            BoardGenerator.fromFen("pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 1: row 1 too short
+            BoardGenerator.fromFen("rnbqkbn/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 1: row 3 invalid char
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/7a/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 2: invalid color to move
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR c KQkq - 0 1")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 3: invalid castling option
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQdq - 0 1")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 4: invalid en passant
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a4 0 1")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 5: negative plies count
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -1 1")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 6: non-positive next move count
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0")
+        }
     }
 
     private fun makeEmptyRow(): Array<Piece?> = arrayOfNulls(8)

@@ -30,6 +30,7 @@ object BoardGenerator {
     private fun toPieces(row: String): Array<Piece?> {
         val result = mutableListOf<Piece?>()
         row.forEach { result.addAll(toPieces(it)) }
+        require (result.size == 8) { "bad row in part1: $row"}
         return result.toTypedArray()
     }
 

@@ -21,13 +21,11 @@ object MoveGenerator {
 
     private fun convert(pieceType: com.github.bhlangonijr.chesslib.PieceType): PieceType {
         return when (pieceType) {
-            com.github.bhlangonijr.chesslib.PieceType.PAWN -> PieceType.P
             com.github.bhlangonijr.chesslib.PieceType.KNIGHT -> PieceType.N
             com.github.bhlangonijr.chesslib.PieceType.BISHOP -> PieceType.B
             com.github.bhlangonijr.chesslib.PieceType.ROOK -> PieceType.R
             com.github.bhlangonijr.chesslib.PieceType.QUEEN -> PieceType.Q
-            com.github.bhlangonijr.chesslib.PieceType.KING -> PieceType.K
-            com.github.bhlangonijr.chesslib.PieceType.NONE -> throw IllegalArgumentException("cannot convert NONE")
+            else -> throw IllegalArgumentException("cannot convert $pieceType")
         }
     }
 
