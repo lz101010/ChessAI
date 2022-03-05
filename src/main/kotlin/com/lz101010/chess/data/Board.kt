@@ -43,7 +43,8 @@ data class Board(
     val enPassant: EnPassantOption? = null
 ) {
     companion object {
-        var empty = Board(pieces = EMPTY_BOARD_LAYOUT)
+        val empty = Board(pieces = EMPTY_BOARD_LAYOUT)
+        val default = Board()
     }
 
     fun evalScore(): Int {

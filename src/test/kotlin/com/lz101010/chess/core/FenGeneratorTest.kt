@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import org.junit.jupiter.params.provider.ValueSource
 
 class FenGeneratorTest {
     @Test
@@ -20,13 +19,13 @@ class FenGeneratorTest {
 
     @Test
     fun defaultBoardFen_passes() {
-        assertThat(FenGenerator.generate(Board()))
+        assertThat(FenGenerator.generate(Board.default))
             .isEqualTo("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
     }
 
     @Test
     fun e4Fen_passes() {
-        val defaultBoard = Board()
+        val defaultBoard = Board.default
         val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
 
         assertThat(FenGenerator.generate(boardAfterE4))
@@ -35,7 +34,7 @@ class FenGeneratorTest {
 
     @Test
     fun e4e5Fen_passes() {
-        val defaultBoard = Board()
+        val defaultBoard = Board.default
         val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
         val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
 
@@ -45,7 +44,7 @@ class FenGeneratorTest {
 
     @Test
     fun e4Nh6Fen_passes() {
-        val defaultBoard = Board()
+        val defaultBoard = Board.default
         val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
         val boardAfterH6 = MoveMaker.move(boardAfterE4, OpeningMoves.Nh6)
 
@@ -55,7 +54,7 @@ class FenGeneratorTest {
 
     @Test
     fun e4Nf6Fen_passes() {
-        val defaultBoard = Board()
+        val defaultBoard = Board.default
         val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
         val boardAfterF6 = MoveMaker.move(boardAfterE4, OpeningMoves.Nf6)
         val boardAfterD4 = MoveMaker.move(boardAfterF6, OpeningMoves.D4)

@@ -48,8 +48,7 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4Moves_passes() {
-        val defaultBoard = Board()
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
 
         assertThat(MoveGenerator.find(boardAfterE4))
             .hasSize(20)
@@ -58,8 +57,7 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4B5Moves_passes() {
-        val defaultBoard = Board()
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
         val boardAfterB5 = MoveMaker.move(boardAfterE4, OpeningMoves.B5)
 
         assertThat(MoveGenerator.find(boardAfterB5))
@@ -70,8 +68,7 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4D5Moves_passes() {
-        val defaultBoard = Board()
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
         val boardAfterD5 = MoveMaker.move(boardAfterE4, OpeningMoves.D5)
 
         assertThat(MoveGenerator.find(boardAfterD5))
@@ -83,8 +80,7 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4E5Moves_passes() {
-        val defaultBoard = Board()
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
         val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
 
         assertThat(MoveGenerator.find(boardAfterE5))
@@ -94,8 +90,7 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4F5Moves_passes() {
-        val defaultBoard = Board()
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
         val boardAfterF5 = MoveMaker.move(boardAfterE4, OpeningMoves.F5)
 
         assertThat(MoveGenerator.find(boardAfterF5))
@@ -111,8 +106,7 @@ class MoveGeneratorTest {
         if (move in listOf(OpeningMoves.B5, OpeningMoves.D5, OpeningMoves.E5, OpeningMoves.F5)) {
             return
         }
-        val defaultBoard = Board()
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
         val boardAfterE5 = MoveMaker.move(boardAfterE4, move)
 
         assertThat(MoveGenerator.find(boardAfterE5))
