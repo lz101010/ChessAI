@@ -6,11 +6,12 @@ package com.lz101010.chess.data
 data class Move(
     val piece: Piece,
     val from: Square,
-    val to: Square
+    val to: Square,
+    val promotion: PieceType? = null
 ) {
     val pretty = piece.pretty + from + to
 
     override fun toString(): String {
-        return piece.type.shortName + from + to
+        return piece.type.shortName + from + to + (promotion ?: "")
     }
 }

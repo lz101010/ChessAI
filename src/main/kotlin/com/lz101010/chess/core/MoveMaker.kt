@@ -42,7 +42,7 @@ object MoveMaker {
             return null
         }
         if (move.to.file == file && move.to.rank == rank) {
-            return move.piece
+            return move.promotion?.let { Piece(it, move.piece.white) } ?: move.piece
         }
         return defaultPiece
     }

@@ -121,6 +121,17 @@ class MoveGeneratorTest {
             .contains(Move(PieceType.P.asWhite, Square.E4, Square.E5))
     }
 
+    @Test
+    fun findPawnPromotion_passes() {
+        val board = BoardGenerator.fromFen("8/2P5/4K3/8/8/1k6/8/8 w - - 0 1")
+        assertThat(MoveGenerator.find(board))
+            .hasSize(12)
+            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.Q))
+            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.R))
+            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.B))
+            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.N))
+    }
+
     companion object {
         @JvmStatic
         private fun movesAfterE4(): List<Move> {
