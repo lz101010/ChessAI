@@ -18,9 +18,8 @@ object FenGenerator {
     }
 
     private fun normalizeEmptyFields(rank: String): String {
-        if (rank.length != 8) {
-            throw IllegalArgumentException("bad length: ${rank.length} ($rank)")
-        }
+        require (rank.length == 8) { "bad length: ${rank.length} ($rank)" }
+
         return rank
             .replace("--------", "8")
             .replace("-------", "7")
@@ -35,7 +34,7 @@ object FenGenerator {
     private fun group2(board: Board): String = if (board.whiteToMove) "w" else "b"
 
     private fun group3(board: Board): String =
-        board.castlingOptions.map { it.description }.sorted().joinToString("").ifBlank { "-" }
+        board.castlingOptions.map { it.description }.sorted().distinct().joinToString("").ifBlank { "-" }
 
     private fun group4(board: Board): String = board.enPassant?.name?.lowercase() ?: "-"
 

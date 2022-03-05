@@ -20,8 +20,7 @@ object MoveGenerator {
     }
 
     private fun convert(square: com.github.bhlangonijr.chesslib.Square): Square {
-        return Square.values().firstOrNull { it.file == convert(square.file) && it.rank == convert(square.rank) }
-            ?: throw IllegalArgumentException("invalid square: $square")
+        return Square.values().first { it.file == convert(square.file) && it.rank == convert(square.rank) }
     }
 
     private fun convert(file: com.github.bhlangonijr.chesslib.File): File {
