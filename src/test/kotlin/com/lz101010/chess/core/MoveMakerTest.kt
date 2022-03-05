@@ -55,6 +55,16 @@ class MoveMakerTest {
     }
 
     @Test
+    fun moveE4Nf6_fails() {
+        assertThrows<IllegalArgumentException> {
+            val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
+            MoveMaker.move(boardAfterE4, OpeningMoves.D4)
+        }.let {
+            assertThat(it.message).isEqualTo("black to move")
+        }
+    }
+
+    @Test
     fun movePe4Pe5Ke2_passes() {
         val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
         val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
@@ -81,6 +91,20 @@ class MoveMakerTest {
         val boardAfterA2 = MoveMaker.move(boardAfterE5, Move(PieceType.R.asWhite, from = Square.A1, to = Square.A2))
 
         assertThat(boardAfterA2.castlingOptions)
+            .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
+    }
+
+    @Test
+    fun moveRookFromBFile_passes() {
+        val boardAfterA4 = MoveMaker.move(Board.default, OpeningMoves.A4)
+        val boardAfterE5 = MoveMaker.move(boardAfterA4, OpeningMoves.E5)
+        val boardAfterA2 = MoveMaker.move(boardAfterE5, Move(PieceType.R.asWhite, from = Square.A1, to = Square.A3))
+        val boardAfterD5 = MoveMaker.move(boardAfterA2, OpeningMoves.D5)
+        val boardAfterB3 = MoveMaker.move(boardAfterD5, Move(PieceType.R.asWhite, from = Square.A3, to = Square.B3))
+        val boardAfterF5 = MoveMaker.move(boardAfterB3, OpeningMoves.F5)
+        val boardAfterH3 = MoveMaker.move(boardAfterF5, Move(PieceType.R.asWhite, from = Square.B3, to = Square.H3))
+
+        assertThat(boardAfterH3.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
     }
 
