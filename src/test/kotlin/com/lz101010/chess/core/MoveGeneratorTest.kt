@@ -8,6 +8,7 @@ import com.lz101010.chess.data.Move
 import com.lz101010.chess.data.PieceType
 import com.lz101010.chess.data.Square
 import com.lz101010.chess.support.OpeningMoves
+import com.lz101010.chess.support.move
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -22,7 +23,7 @@ class MoveGeneratorTest {
 
     @Test
     fun findDefaultBoardMoves_passes() {
-        assertThat(MoveGenerator.find(Board()))
+        assertThat(MoveGenerator.find(Board.default))
             .hasSize(20)
             .contains(OpeningMoves.A3)
             .contains(OpeningMoves.B3)
@@ -57,10 +58,11 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4B5Moves_passes() {
-        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
-        val boardAfterB5 = MoveMaker.move(boardAfterE4, OpeningMoves.B5)
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(OpeningMoves.B5)
 
-        assertThat(MoveGenerator.find(boardAfterB5))
+        assertThat(MoveGenerator.find(board))
             .hasSize(29)
             .containsAll(movesAfterE4E5().filterNot { it == Move(PieceType.B.asWhite, Square.F1, Square.A6) })
             .contains(Move(PieceType.P.asWhite, Square.E4, Square.E5))
@@ -68,10 +70,11 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4D5Moves_passes() {
-        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
-        val boardAfterD5 = MoveMaker.move(boardAfterE4, OpeningMoves.D5)
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(OpeningMoves.D5)
 
-        assertThat(MoveGenerator.find(boardAfterD5))
+        assertThat(MoveGenerator.find(board))
             .hasSize(31)
             .containsAll(movesAfterE4E5())
             .contains(Move(PieceType.P.asWhite, Square.E4, Square.D5))
@@ -80,20 +83,22 @@ class MoveGeneratorTest {
 
     @Test
     fun findBoardAfterE4E5Moves_passes() {
-        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
-        val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(OpeningMoves.E5)
 
-        assertThat(MoveGenerator.find(boardAfterE5))
+        assertThat(MoveGenerator.find(board))
             .hasSize(29)
             .containsAll(movesAfterE4E5())
     }
 
     @Test
     fun findBoardAfterE4F5Moves_passes() {
-        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
-        val boardAfterF5 = MoveMaker.move(boardAfterE4, OpeningMoves.F5)
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(OpeningMoves.F5)
 
-        assertThat(MoveGenerator.find(boardAfterF5))
+        assertThat(MoveGenerator.find(board))
             .hasSize(31)
             .containsAll(movesAfterE4E5())
             .contains(Move(PieceType.P.asWhite, Square.E4, Square.F5))
@@ -106,10 +111,11 @@ class MoveGeneratorTest {
         if (move in listOf(OpeningMoves.B5, OpeningMoves.D5, OpeningMoves.E5, OpeningMoves.F5)) {
             return
         }
-        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
-        val boardAfterE5 = MoveMaker.move(boardAfterE4, move)
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(move)
 
-        assertThat(MoveGenerator.find(boardAfterE5))
+        assertThat(MoveGenerator.find(board))
             .hasSize(30)
             .containsAll(movesAfterE4E5())
             .contains(Move(PieceType.P.asWhite, Square.E4, Square.E5))

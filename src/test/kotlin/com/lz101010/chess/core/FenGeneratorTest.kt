@@ -5,6 +5,7 @@ package com.lz101010.chess.core
 
 import com.lz101010.chess.data.*
 import com.lz101010.chess.support.OpeningMoves
+import com.lz101010.chess.support.move
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -34,33 +35,33 @@ class FenGeneratorTest {
 
     @Test
     fun e4e5Fen_passes() {
-        val defaultBoard = Board.default
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
-        val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(OpeningMoves.E5)
 
-        assertThat(FenGenerator.generate(boardAfterE5))
+        assertThat(FenGenerator.generate(board))
             .isEqualTo("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2")
     }
 
     @Test
     fun e4Nh6Fen_passes() {
-        val defaultBoard = Board.default
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
-        val boardAfterH6 = MoveMaker.move(boardAfterE4, OpeningMoves.Nh6)
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(OpeningMoves.Nh6)
 
-        assertThat(FenGenerator.generate(boardAfterH6))
+        assertThat(FenGenerator.generate(board))
             .isEqualTo("rnbqkb1r/pppppppp/7n/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2")
     }
 
     @Test
     fun e4Nf6Fen_passes() {
-        val defaultBoard = Board.default
-        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
-        val boardAfterF6 = MoveMaker.move(boardAfterE4, OpeningMoves.Nf6)
-        val boardAfterD4 = MoveMaker.move(boardAfterF6, OpeningMoves.D4)
-        val boardAfterXE4 = MoveMaker.move(boardAfterD4, Move(PieceType.N.asBlack, Square.F6, Square.E4))
+        val board = Board.default
+            .move(OpeningMoves.E4)
+            .move(OpeningMoves.Nf6)
+            .move(OpeningMoves.D4)
+            .move(Move(PieceType.N.asBlack, Square.F6, Square.E4))
 
-        assertThat(FenGenerator.generate(boardAfterXE4))
+        assertThat(FenGenerator.generate(board))
             .isEqualTo("rnbqkb1r/pppppppp/8/8/3Pn3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3")
     }
 
