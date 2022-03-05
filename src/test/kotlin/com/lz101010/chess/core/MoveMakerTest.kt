@@ -126,4 +126,76 @@ class MoveMakerTest {
 
         assertThat(boardAfterE7.castlingOptions).isEmpty()
     }
+
+    @Test
+    fun enPassantA4A5_passes() {
+        val boardAfterA4 = MoveMaker.move(Board.default, OpeningMoves.A4)
+        assertThat(boardAfterA4.enPassant).isEqualTo(EnPassantOption.A3)
+
+        val boardAfterA5 = MoveMaker.move(boardAfterA4, OpeningMoves.A5)
+        assertThat(boardAfterA5.enPassant).isEqualTo(EnPassantOption.A6)
+    }
+
+    @Test
+    fun enPassantB4B5_passes() {
+        val boardAfterB4 = MoveMaker.move(Board.default, OpeningMoves.B4)
+        assertThat(boardAfterB4.enPassant).isEqualTo(EnPassantOption.B3)
+
+        val boardAfterB5 = MoveMaker.move(boardAfterB4, OpeningMoves.B5)
+        assertThat(boardAfterB5.enPassant).isEqualTo(EnPassantOption.B6)
+    }
+
+    @Test
+    fun enPassantC4C5_passes() {
+        val boardAfterC4 = MoveMaker.move(Board.default, OpeningMoves.C4)
+        assertThat(boardAfterC4.enPassant).isEqualTo(EnPassantOption.C3)
+
+        val boardAfterC5 = MoveMaker.move(boardAfterC4, OpeningMoves.C5)
+        assertThat(boardAfterC5.enPassant).isEqualTo(EnPassantOption.C6)
+    }
+
+    @Test
+    fun enPassantD4D5_passes() {
+        val boardAfterD4 = MoveMaker.move(Board.default, OpeningMoves.D4)
+        assertThat(boardAfterD4.enPassant).isEqualTo(EnPassantOption.D3)
+
+        val boardAfterD5 = MoveMaker.move(boardAfterD4, OpeningMoves.D5)
+        assertThat(boardAfterD5.enPassant).isEqualTo(EnPassantOption.D6)
+    }
+
+    @Test
+    fun enPassantE4E5_passes() {
+        val boardAfterE4 = MoveMaker.move(Board.default, OpeningMoves.E4)
+        assertThat(boardAfterE4.enPassant).isEqualTo(EnPassantOption.E3)
+
+        val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
+        assertThat(boardAfterE5.enPassant).isEqualTo(EnPassantOption.E6)
+    }
+
+    @Test
+    fun enPassantF4F5_passes() {
+        val boardAfterF4 = MoveMaker.move(Board.default, OpeningMoves.F4)
+        assertThat(boardAfterF4.enPassant).isEqualTo(EnPassantOption.F3)
+
+        val boardAfterF5 = MoveMaker.move(boardAfterF4, OpeningMoves.F5)
+        assertThat(boardAfterF5.enPassant).isEqualTo(EnPassantOption.F6)
+    }
+
+    @Test
+    fun enPassantG4G5_passes() {
+        val boardAfterG4 = MoveMaker.move(Board.default, OpeningMoves.G4)
+        assertThat(boardAfterG4.enPassant).isEqualTo(EnPassantOption.G3)
+
+        val boardAfterG5 = MoveMaker.move(boardAfterG4, OpeningMoves.G5)
+        assertThat(boardAfterG5.enPassant).isEqualTo(EnPassantOption.G6)
+    }
+
+    @Test
+    fun enPassantH4H5_passes() {
+        val boardAfterH4 = MoveMaker.move(Board.default, OpeningMoves.H4)
+        assertThat(boardAfterH4.enPassant).isEqualTo(EnPassantOption.H3)
+
+        val boardAfterH5 = MoveMaker.move(boardAfterH4, OpeningMoves.H5)
+        assertThat(boardAfterH5.enPassant).isEqualTo(EnPassantOption.H6)
+    }
 }

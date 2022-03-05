@@ -4,6 +4,7 @@
 package com.lz101010.chess.core
 
 import com.lz101010.chess.data.*
+import kotlin.math.abs
 
 object MoveMaker {
     fun move(board: Board, move: Move): Board {
@@ -20,7 +21,8 @@ object MoveMaker {
             whiteToMove = !board.whiteToMove,
             castlingOptions = updateCastlingOptions(board, move),
             plies = updatePlies(board, move),
-            nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u
+            nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u,
+            enPassant = updateEnPassant(move)
         )
     }
 
@@ -78,5 +80,33 @@ object MoveMaker {
             return 0u
         }
         return board.plies + 1u
+    }
+
+    private fun updateEnPassant(move: Move): EnPassantOption? {
+        if (move.piece.type != PieceType.P) {
+            return null
+        }
+        if (abs(move.from.rank.ordinal - move.to.rank.ordinal) != 2) {
+            return null
+        }
+        return when (move.to) {
+            Square.A4 -> EnPassantOption.A3
+            Square.B4 -> EnPassantOption.B3
+            Square.C4 -> EnPassantOption.C3
+            Square.D4 -> EnPassantOption.D3
+            Square.E4 -> EnPassantOption.E3
+            Square.F4 -> EnPassantOption.F3
+            Square.G4 -> EnPassantOption.G3
+            Square.H4 -> EnPassantOption.H3
+            Square.A5 -> EnPassantOption.A6
+            Square.B5 -> EnPassantOption.B6
+            Square.C5 -> EnPassantOption.C6
+            Square.D5 -> EnPassantOption.D6
+            Square.E5 -> EnPassantOption.E6
+            Square.F5 -> EnPassantOption.F6
+            Square.G5 -> EnPassantOption.G6
+            Square.H5 -> EnPassantOption.H6
+            else -> throw IllegalStateException("uncovered scenario: $move")
+        }
     }
 }

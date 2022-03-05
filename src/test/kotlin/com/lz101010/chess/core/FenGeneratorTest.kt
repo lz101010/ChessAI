@@ -29,7 +29,7 @@ class FenGeneratorTest {
         val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
 
         assertThat(FenGenerator.generate(boardAfterE4))
-            .isEqualTo("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")
+            .isEqualTo("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1")
     }
 
     @Test
@@ -39,7 +39,7 @@ class FenGeneratorTest {
         val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
 
         assertThat(FenGenerator.generate(boardAfterE5))
-            .isEqualTo("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")
+            .isEqualTo("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq e6 0 2")
     }
 
     @Test
