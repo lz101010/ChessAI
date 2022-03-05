@@ -232,4 +232,12 @@ class MoveMakerTest {
             .move(OpeningMoves.H5)
             .apply { assertThat(this.enPassant).isEqualTo(EnPassantOption.H6) }
     }
+
+    @Test
+    fun promotion_passes() {
+        val board = BoardGenerator.fromFen("8/2P5/4K3/8/8/1k6/8/8 w - - 0 1")
+            .move(Move(PieceType.P.asWhite, Square.C7, Square.C8, promotion = PieceType.Q))
+
+        assertThat(board).isEqualTo(BoardGenerator.fromFen("2Q5/8/4K3/8/8/1k6/8/8 b - - 0 1"))
+    }
 }

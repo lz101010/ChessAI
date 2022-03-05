@@ -40,4 +40,9 @@ class MoveTest {
         assertThat(Move(PieceType.Q.asWhite, Square.E3, Square.E4).pretty).isEqualTo("♕e3e4")
         assertThat(Move(PieceType.K.asWhite, Square.F3, Square.F4).pretty).isEqualTo("♔f3f4")
     }
+
+    @Test
+    fun promotionPrint_passes() {
+        assertThat(Move(PieceType.P.asBlack, Square.A1, Square.A2, PieceType.Q).toString()).isEqualTo("a1a2Q")
+    }
 }

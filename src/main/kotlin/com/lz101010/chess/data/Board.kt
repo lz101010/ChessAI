@@ -38,9 +38,9 @@ data class Board(
     val pieces: Array<Array<Piece?>> = INITIAL_BOARD_LAYOUT,
     val whiteToMove: Boolean = true,
     val castlingOptions: Collection<CastlingOption> = allOf(CastlingOption::class.java),
+    val enPassant: EnPassantOption? = null,
     val plies: UInt = 0u,
-    val nextMove: UInt = 1u,
-    val enPassant: EnPassantOption? = null
+    val nextMove: UInt = 1u
 ) {
     companion object {
         val empty = Board(pieces = EMPTY_BOARD_LAYOUT)
@@ -70,10 +70,24 @@ data class Board(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        return pieces.contentDeepEquals((other as Board).pieces) && whiteToMove == other.whiteToMove
+        other as Board
+        return pieces.contentDeepEquals(other.pieces)
+                && whiteToMove == other.whiteToMove
+                && castlingOptions.size == other.castlingOptions.size
+                && castlingOptions.containsAll(other.castlingOptions)
+                && enPassant == other.enPassant
+                && plies == other.plies
+                && nextMove == other.nextMove
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(pieces.contentDeepHashCode(), whiteToMove)
+        return Objects.hash(
+            pieces.contentDeepHashCode(),
+            whiteToMove,
+            castlingOptions.sorted(),
+            enPassant,
+            plies,
+            nextMove
+        )
     }
 }
