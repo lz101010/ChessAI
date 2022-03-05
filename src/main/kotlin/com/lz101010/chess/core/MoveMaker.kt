@@ -19,7 +19,7 @@ object MoveMaker {
             pieces = pieces,
             whiteToMove = !board.whiteToMove,
             castlingOptions = updateCastlingOptions(board, move),
-            plies = board.plies + 1u,
+            plies = updatePlies(board, move),
             nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u
         )
     }
@@ -71,4 +71,12 @@ object MoveMaker {
 
     private fun remove(board: Board, vararg castlingOptions: CastlingOption) =
         board.castlingOptions.filterNot { castlingOptions.contains(it) }
+
+
+    private fun updatePlies(board: Board, move: Move): UInt {
+        if (move.piece.type == PieceType.P || board[move.to] != null) {
+            return 0u
+        }
+        return board.plies + 1u
+    }
 }

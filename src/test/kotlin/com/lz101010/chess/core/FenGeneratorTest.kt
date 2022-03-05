@@ -30,7 +30,7 @@ class FenGeneratorTest {
         val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
 
         assertThat(FenGenerator.generate(boardAfterE4))
-            .isEqualTo("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 1 1")
+            .isEqualTo("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")
     }
 
     @Test
@@ -40,7 +40,29 @@ class FenGeneratorTest {
         val boardAfterE5 = MoveMaker.move(boardAfterE4, OpeningMoves.E5)
 
         assertThat(FenGenerator.generate(boardAfterE5))
-            .isEqualTo("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 2 2")
+            .isEqualTo("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2")
+    }
+
+    @Test
+    fun e4Nh6Fen_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterH6 = MoveMaker.move(boardAfterE4, OpeningMoves.Nh6)
+
+        assertThat(FenGenerator.generate(boardAfterH6))
+            .isEqualTo("rnbqkb1r/pppppppp/7n/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2")
+    }
+
+    @Test
+    fun e4Nf6Fen_passes() {
+        val defaultBoard = Board()
+        val boardAfterE4 = MoveMaker.move(defaultBoard, OpeningMoves.E4)
+        val boardAfterF6 = MoveMaker.move(boardAfterE4, OpeningMoves.Nf6)
+        val boardAfterD4 = MoveMaker.move(boardAfterF6, OpeningMoves.D4)
+        val boardAfterXE4 = MoveMaker.move(boardAfterD4, Move(PieceType.N.asBlack, Square.F6, Square.E4))
+
+        assertThat(FenGenerator.generate(boardAfterXE4))
+            .isEqualTo("rnbqkb1r/pppppppp/8/8/3Pn3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3")
     }
 
     @ParameterizedTest
