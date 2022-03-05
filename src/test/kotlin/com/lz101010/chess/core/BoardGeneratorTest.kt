@@ -178,8 +178,14 @@ class BoardGeneratorTest {
         assertThrows<IllegalArgumentException> { // bad part 5: negative plies count
             BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - -1 1")
         }
+        assertThrows<IllegalArgumentException> { // bad part 5: letter for plies count
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - a 1")
+        }
         assertThrows<IllegalArgumentException> { // bad part 6: non-positive next move count
             BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0")
+        }
+        assertThrows<IllegalArgumentException> { // bad part 6: letter for next move count
+            BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 a")
         }
     }
 
