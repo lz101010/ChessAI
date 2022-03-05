@@ -2,6 +2,7 @@
 # Copyright (c) 2022 Lukas Zeller
 
 name: Run SonarQube Scan
+description: Runs SonarQube Scan
 
 inputs:
   github_token:

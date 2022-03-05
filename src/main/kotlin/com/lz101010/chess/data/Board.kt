@@ -10,6 +10,7 @@ import com.lz101010.chess.data.PieceType.P
 import com.lz101010.chess.data.PieceType.Q
 import com.lz101010.chess.data.PieceType.K
 import java.util.*
+import java.util.EnumSet.allOf
 
 private val INITIAL_BOARD_LAYOUT = arrayOf(
     arrayOf<Piece?>(R.asBlack, N.asBlack, B.asBlack, Q.asBlack, K.asBlack, B.asBlack, N.asBlack, R.asBlack),
@@ -35,11 +36,17 @@ private val EMPTY_BOARD_LAYOUT = arrayOf(
 
 data class Board(
     val pieces: Array<Array<Piece?>> = INITIAL_BOARD_LAYOUT,
-    val whiteToMove: Boolean = true
+    val whiteToMove: Boolean = true,
+    val castlingOptions: Collection<CastlingOption> = allOf(CastlingOption::class.java),
+    val plies: UInt = 0u,
+    val nextMove: UInt = 1u,
+    val enPassant: EnPassantOption? = null
 ) {
     companion object {
-        var empty = Board(pieces = EMPTY_BOARD_LAYOUT)
+        val empty = Board(pieces = EMPTY_BOARD_LAYOUT)
+        val default = Board()
     }
+
     fun evalScore(): Int {
         return pieces.flatten()
             .filterNotNull()
@@ -47,9 +54,11 @@ data class Board(
             .sumOf { it.value }
     }
 
-    operator fun get(field: Field): Piece? {
-        val row = field.ordinal / 8
-        val col = field.ordinal % 8
+    operator fun get(square: Square): Piece? = get(square.file, square.rank)
+
+    operator fun get(file: File, rank: Rank): Piece? {
+        val row = 7 - rank.ordinal
+        val col = file.ordinal
         return pieces[row][col]
     }
 

@@ -5,8 +5,8 @@ package com.lz101010.chess.data
 
 data class Move(
     val piece: Piece,
-    val from: Field,
-    val to: Field
+    val from: Square,
+    val to: Square
 ) {
     val pretty = piece.pretty + from + to
 
