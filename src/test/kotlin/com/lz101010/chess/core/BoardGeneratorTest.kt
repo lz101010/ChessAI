@@ -129,7 +129,7 @@ class BoardGeneratorTest {
             .isEqualTo(Board.default.copy(enPassant = EnPassantOption.C6))
         assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq d3 0 1"))
             .isEqualTo(Board.default.copy(enPassant = EnPassantOption.D3))
-        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e6 0 1"))
+        assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq d6 0 1"))
             .isEqualTo(Board.default.copy(enPassant = EnPassantOption.D6))
         assertThat(BoardGenerator.fromFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1"))
             .isEqualTo(Board.default.copy(enPassant = EnPassantOption.E3))

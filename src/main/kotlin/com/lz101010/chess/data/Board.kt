@@ -70,10 +70,24 @@ data class Board(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        return pieces.contentDeepEquals((other as Board).pieces) && whiteToMove == other.whiteToMove
+        other as Board
+        return pieces.contentDeepEquals(other.pieces)
+                && whiteToMove == other.whiteToMove
+                && castlingOptions.size == other.castlingOptions.size
+                && castlingOptions.containsAll(other.castlingOptions)
+                && enPassant == other.enPassant
+                && plies == other.plies
+                && nextMove == other.nextMove
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(pieces.contentDeepHashCode(), whiteToMove)
+        return Objects.hash(
+            pieces.contentDeepHashCode(),
+            whiteToMove,
+            castlingOptions.sorted(),
+            enPassant,
+            plies,
+            nextMove
+        )
     }
 }
