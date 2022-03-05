@@ -38,9 +38,9 @@ data class Board(
     val pieces: Array<Array<Piece?>> = INITIAL_BOARD_LAYOUT,
     val whiteToMove: Boolean = true,
     val castlingOptions: Collection<CastlingOption> = allOf(CastlingOption::class.java),
+    val enPassant: EnPassantOption? = null,
     val plies: UInt = 0u,
-    val nextMove: UInt = 1u,
-    val enPassant: EnPassantOption? = null
+    val nextMove: UInt = 1u
 ) {
     companion object {
         val empty = Board(pieces = EMPTY_BOARD_LAYOUT)

@@ -20,9 +20,9 @@ object MoveMaker {
             pieces = pieces,
             whiteToMove = !board.whiteToMove,
             castlingOptions = updateCastlingOptions(board, move),
+            enPassant = updateEnPassant(move),
             plies = updatePlies(board, move),
-            nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u,
-            enPassant = updateEnPassant(move)
+            nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u
         )
     }
 
