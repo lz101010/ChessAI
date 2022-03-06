@@ -44,7 +44,35 @@ object MoveMaker {
         if (move.to.file == file && move.to.rank == rank) {
             return move.promotion?.let { Piece(it, move.piece.white) } ?: move.piece
         }
+        if (isCastling(move) && rank == move.to.rank) {
+            return castle(move.to.file == File.FILE_G, move.to.rank == Rank.RANK_1, file, defaultPiece)
+        }
         return defaultPiece
+    }
+
+    private fun castle(
+        kingSide: Boolean,
+        white: Boolean,
+        file: File,
+        defaultPiece: Piece?
+    ): Piece? {
+        return if (kingSide) {
+            when (file) {
+                File.FILE_F -> Piece(PieceType.R, white)
+                File.FILE_H -> null
+                else -> defaultPiece
+            }
+        } else {
+            when (file) {
+                File.FILE_D -> Piece(PieceType.R, white)
+                File.FILE_A -> null
+                else -> defaultPiece
+            }
+        }
+    }
+
+    private fun isCastling(move: Move): Boolean {
+        return move.piece.type == PieceType.K && abs(move.from.file.ordinal - move.to.file.ordinal) == 2
     }
 
     private fun updateCastlingOptions(board: Board, move: Move): Collection<CastlingOption> {

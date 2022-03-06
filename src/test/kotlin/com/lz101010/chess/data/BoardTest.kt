@@ -63,6 +63,7 @@ class BoardTest {
 
     private fun testHashAndEquality_forDifferentBoards(board1: Board, board2: Board) {
         assertThat(board1).isNotEqualTo(board2)
+        assertThat(board2).isNotEqualTo(board1)
         assertThat(board1.hashCode()).isNotEqualTo(board2.hashCode())
     }
 

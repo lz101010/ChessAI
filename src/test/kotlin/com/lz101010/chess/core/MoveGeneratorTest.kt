@@ -132,6 +132,15 @@ class MoveGeneratorTest {
             .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.N))
     }
 
+    @Test
+    fun findCastling_passes() {
+        val board = BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1")
+
+        assertThat(MoveGenerator.find(board))
+            .contains(Move(PieceType.K.asWhite, Square.E1, Square.G1))
+            .contains(Move(PieceType.K.asWhite, Square.E1, Square.C1))
+    }
+
     companion object {
         @JvmStatic
         private fun movesAfterE4(): List<Move> {
