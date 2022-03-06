@@ -12,31 +12,25 @@ import com.lz101010.chess.support.move
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ScoreGeneratorTest {
+class SimpleScoreGeneratorTest {
     @Test
     fun matedScore_passes() {
-        val board = BoardGenerator.fromFen("3k4/3Q4/3K4/8/8/8/8/8 b - - 0 1")
-
-        assertThat(ScoreGenerator.simpleScore(board)).isEqualTo(Int.MIN_VALUE)
+        assertThat(score("3k4/3Q4/3K4/8/8/8/8/8 b - - 0 1")).isEqualTo(Int.MIN_VALUE)
     }
 
     @Test
     fun staleMatedScore_passes() {
-        val board = BoardGenerator.fromFen("k1K5/7Q/8/8/8/8/8/8 b - - 0 1")
-
-        assertThat(ScoreGenerator.simpleScore(board)).isEqualTo(0)
+        assertThat(score("k1K5/7Q/8/8/8/8/8/8 b - - 0 1")).isEqualTo(0)
     }
 
     @Test
     fun matePossibleScore_passes() {
-        val board = BoardGenerator.fromFen("3k4/8/3K4/5Q2/8/8/8/8 w - - 0 1")
-
-        assertThat(ScoreGenerator.simpleScore(board)).isEqualTo(Int.MAX_VALUE)
+        assertThat(score("3k4/8/3K4/5Q2/8/8/8/8 w - - 0 1")).isEqualTo(Int.MAX_VALUE)
     }
 
     @Test
     fun defaultBoardScore_passes() {
-        assertThat(ScoreGenerator.simpleScore(Board.default)).isEqualTo(0)
+        assertThat(ScoreGenerator.simple(Board.default)).isEqualTo(0)
     }
 
     @Test
@@ -44,7 +38,7 @@ class ScoreGeneratorTest {
         val board = Board.default
             .move(OpeningMoves.E4).move(OpeningMoves.D5).move(Move(PieceType.P.asWhite, Square.E4, Square.D5))
 
-        assertThat(ScoreGenerator.simpleScore(board)).isEqualTo(-1)
+        assertThat(ScoreGenerator.simple(board)).isEqualTo(-1)
     }
 
     @Test
@@ -55,6 +49,11 @@ class ScoreGeneratorTest {
             .move(Move(PieceType.P.asWhite, Square.E4, Square.D5))
             .move(Move(PieceType.Q.asBlack, Square.D8, Square.D5))
 
-        assertThat(ScoreGenerator.simpleScore(board)).isEqualTo(0)
+        assertThat(ScoreGenerator.simple(board)).isEqualTo(0)
+    }
+
+    private fun score(fen: String): Int {
+        val board = BoardGenerator.fromFen(fen)
+        return ScoreGenerator.simple(board)
     }
 }
