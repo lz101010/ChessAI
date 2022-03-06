@@ -68,13 +68,6 @@ class BoardTest {
     }
 
     @Test
-    fun initialEvalScore_passes() {
-        val initialScore = 8 + 9 + 6 + 6 + 10
-        assertThat(Board(whiteToMove = true).evalScore()).isEqualTo(initialScore)
-        assertThat(Board(whiteToMove = false).evalScore()).isEqualTo(initialScore)
-    }
-
-    @Test
     fun initialBoardColors_passes() {
         for (index in 0..7) {
             assertThat(Board.default.pieces[0][0]!!.black).isTrue
