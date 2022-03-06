@@ -11,7 +11,7 @@ object MoveMaker {
         validate(board, move)
 
         val isEnPassant = isEnPassant(board, move)
-        val pieces: Array<Array<Piece?>> = Rank.values().reversed().map { rank ->
+        val pieces = Rank.values().reversed().map { rank ->
             File.values().map { file ->
                 piece(move, file, rank, isEnPassant, board[file, rank])
             }.toTypedArray()
@@ -46,16 +46,16 @@ object MoveMaker {
         isEnPassant: Boolean,
         defaultPiece: Piece?
     ): Piece? {
-        if (move.from.file == file && move.from.rank == rank) {
+        if (move.from.file == file && move.from.rank == rank) { // vacated square
             return null
         }
-        if (move.to.file == file && move.to.rank == rank) {
+        if (move.to.file == file && move.to.rank == rank) { // target square
             return move.promotion?.let { Piece(it, move.piece.white) } ?: move.piece
         }
-        if (isCastling(move) && rank == move.to.rank) {
+        if (isCastling(move) && rank == move.to.rank) { // move rook
             return castle(move.to.file == File.FILE_G, move.to.rank == Rank.RANK_1, file, defaultPiece)
         }
-        if (isEnPassant) {
+        if (isEnPassant) { // remove pawn
             return enPassant(move.to, file, rank, defaultPiece)
         }
         return defaultPiece
@@ -104,14 +104,6 @@ object MoveMaker {
         }
     }
 
-    private fun kingMoved(move: Move, board: Board): Collection<CastlingOption> {
-        return if (move.piece.white) {
-            remove(board, CastlingOption.WHITE_K, CastlingOption.WHITE_Q)
-        } else {
-            remove(board, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
-        }
-    }
-
     private fun rookMoved(move: Move, board: Board): Collection<CastlingOption> {
         return when (move.from.file) {
             File.FILE_A -> remove(board, if (move.piece.white) CastlingOption.WHITE_Q else CastlingOption.BLACK_Q)
@@ -120,9 +112,16 @@ object MoveMaker {
         }
     }
 
+    private fun kingMoved(move: Move, board: Board): Collection<CastlingOption> {
+        return if (move.piece.white) {
+            remove(board, CastlingOption.WHITE_K, CastlingOption.WHITE_Q)
+        } else {
+            remove(board, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
+        }
+    }
+
     private fun remove(board: Board, vararg castlingOptions: CastlingOption) =
         board.castlingOptions.filterNot { castlingOptions.contains(it) }
-
 
     private fun updatePlies(board: Board, move: Move): UInt {
         if (move.piece.type == PieceType.P || board[move.to] != null) {
