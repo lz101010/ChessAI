@@ -141,6 +141,14 @@ class MoveGeneratorTest {
             .contains(Move(PieceType.K.asWhite, Square.E1, Square.C1))
     }
 
+    @Test
+    fun findEnPassant_passes() {
+        val board = BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4p3/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3")
+
+        assertThat(MoveGenerator.find(board))
+            .contains(Move(PieceType.P.asWhite, Square.E5, Square.F6))
+    }
+
     companion object {
         @JvmStatic
         private fun movesAfterE4(): List<Move> {

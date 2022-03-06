@@ -10,9 +10,10 @@ object MoveMaker {
     fun move(board: Board, move: Move): Board {
         validate(board, move)
 
+        val isEnPassant = isEnPassant(board, move)
         val pieces: Array<Array<Piece?>> = Rank.values().reversed().map { rank ->
             File.values().map { file ->
-                piece(move, file, rank, board[file, rank])
+                piece(move, file, rank, isEnPassant, board[file, rank])
             }.toTypedArray()
         }.toTypedArray()
 
@@ -32,10 +33,17 @@ object MoveMaker {
         require(board[move.to]?.white != board.whiteToMove) { "${move.to} is occupied by same color piece" }
     }
 
+    private fun isEnPassant(board: Board, move: Move): Boolean {
+        return board.enPassant != null
+                && move.piece.type == PieceType.P
+                && move.to.name == board.enPassant.name // shortcut hack
+    }
+
     private fun piece(
         move: Move,
         file: File,
         rank: Rank,
+        isEnPassant: Boolean,
         defaultPiece: Piece?
     ): Piece? {
         if (move.from.file == file && move.from.rank == rank) {
@@ -47,7 +55,14 @@ object MoveMaker {
         if (isCastling(move) && rank == move.to.rank) {
             return castle(move.to.file == File.FILE_G, move.to.rank == Rank.RANK_1, file, defaultPiece)
         }
+        if (isEnPassant) {
+            return enPassant(move.to, file, rank, defaultPiece)
+        }
         return defaultPiece
+    }
+
+    private fun isCastling(move: Move): Boolean {
+        return move.piece.type == PieceType.K && abs(move.from.file.ordinal - move.to.file.ordinal) == 2
     }
 
     private fun castle(
@@ -71,8 +86,14 @@ object MoveMaker {
         }
     }
 
-    private fun isCastling(move: Move): Boolean {
-        return move.piece.type == PieceType.K && abs(move.from.file.ordinal - move.to.file.ordinal) == 2
+    private fun enPassant(target: Square, file: File, rank: Rank, defaultPiece: Piece?): Piece? {
+        if (target.file != file) {
+            return defaultPiece
+        }
+        if (target.rank == Rank.RANK_3 && rank == Rank.RANK_4 || target.rank == Rank.RANK_6 && rank == Rank.RANK_5) {
+            return null
+        }
+        return defaultPiece
     }
 
     private fun updateCastlingOptions(board: Board, move: Move): Collection<CastlingOption> {

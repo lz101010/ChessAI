@@ -272,4 +272,12 @@ class MoveMakerTest {
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("4k3/8/8/8/8/8/8/2KR3R b - - 1 1"))
     }
+
+    @Test
+    fun enPassantCapture_passes() {
+        val board = BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4p3/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3")
+            .move(Move(PieceType.P.asWhite, Square.E5, Square.F6))
+
+        assertThat(board).isEqualTo(BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4pP2/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3"))
+    }
 }
