@@ -11,8 +11,11 @@ object PositionEvaluator {
     }
 
     fun isMate(board: Board, move: Move): Boolean {
-        val nextBoard = MoveMaker.move(board, move)
-        return isCheck(nextBoard) && noMovesLeft(nextBoard)
+        return isMate(MoveMaker.move(board, move))
+    }
+
+    fun isMate(board: Board): Boolean {
+        return isCheck(board) && noMovesLeft(board)
     }
 
     fun isTechnicalMate(board: Board, move: Move): Boolean {
@@ -22,8 +25,11 @@ object PositionEvaluator {
     }
 
     fun isStaleMate(board: Board, move: Move): Boolean {
-        val nextBoard = MoveMaker.move(board, move)
-        return !isCheck(nextBoard) && noMovesLeft(nextBoard)
+        return isStaleMate(MoveMaker.move(board, move))
+    }
+
+    fun isStaleMate(board: Board): Boolean {
+        return !isCheck(board) && noMovesLeft(board)
     }
 
     fun isTechnicalDraw(board: Board, move: Move): Boolean {

@@ -47,13 +47,6 @@ data class Board(
         val default = Board()
     }
 
-    fun evalScore(): Int {
-        return pieces.flatten()
-            .filterNotNull()
-            .filter { whiteToMove == it.white }
-            .sumOf { it.value }
-    }
-
     operator fun get(square: Square): Piece? = get(square.file, square.rank)
 
     operator fun get(file: File, rank: Rank): Piece? {

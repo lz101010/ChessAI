@@ -63,14 +63,8 @@ class BoardTest {
 
     private fun testHashAndEquality_forDifferentBoards(board1: Board, board2: Board) {
         assertThat(board1).isNotEqualTo(board2)
+        assertThat(board2).isNotEqualTo(board1)
         assertThat(board1.hashCode()).isNotEqualTo(board2.hashCode())
-    }
-
-    @Test
-    fun initialEvalScore_passes() {
-        val initialScore = 8 + 9 + 6 + 6 + 10
-        assertThat(Board(whiteToMove = true).evalScore()).isEqualTo(initialScore)
-        assertThat(Board(whiteToMove = false).evalScore()).isEqualTo(initialScore)
     }
 
     @Test

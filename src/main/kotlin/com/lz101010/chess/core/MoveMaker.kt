@@ -10,9 +10,10 @@ object MoveMaker {
     fun move(board: Board, move: Move): Board {
         validate(board, move)
 
-        val pieces: Array<Array<Piece?>> = Rank.values().reversed().map { rank ->
+        val isEnPassant = isEnPassant(board, move)
+        val pieces = Rank.values().reversed().map { rank ->
             File.values().map { file ->
-                piece(move, file, rank, board[file, rank])
+                piece(move, file, rank, isEnPassant, board[file, rank])
             }.toTypedArray()
         }.toTypedArray()
 
@@ -32,17 +33,65 @@ object MoveMaker {
         require(board[move.to]?.white != board.whiteToMove) { "${move.to} is occupied by same color piece" }
     }
 
+    private fun isEnPassant(board: Board, move: Move): Boolean {
+        return board.enPassant != null
+                && move.piece.type == PieceType.P
+                && move.to.name == board.enPassant.name // shortcut hack
+    }
+
     private fun piece(
         move: Move,
         file: File,
         rank: Rank,
+        isEnPassant: Boolean,
         defaultPiece: Piece?
     ): Piece? {
-        if (move.from.file == file && move.from.rank == rank) {
+        if (move.from.file == file && move.from.rank == rank) { // vacated square
             return null
         }
-        if (move.to.file == file && move.to.rank == rank) {
+        if (move.to.file == file && move.to.rank == rank) { // target square
             return move.promotion?.let { Piece(it, move.piece.white) } ?: move.piece
+        }
+        if (isCastling(move) && rank == move.to.rank) { // move rook
+            return castle(move.to.file == File.FILE_G, move.to.rank == Rank.RANK_1, file, defaultPiece)
+        }
+        if (isEnPassant) { // remove pawn
+            return enPassant(move.to, file, rank, defaultPiece)
+        }
+        return defaultPiece
+    }
+
+    private fun isCastling(move: Move): Boolean {
+        return move.piece.type == PieceType.K && abs(move.from.file.ordinal - move.to.file.ordinal) == 2
+    }
+
+    private fun castle(
+        kingSide: Boolean,
+        white: Boolean,
+        file: File,
+        defaultPiece: Piece?
+    ): Piece? {
+        return if (kingSide) {
+            when (file) {
+                File.FILE_F -> Piece(PieceType.R, white)
+                File.FILE_H -> null
+                else -> defaultPiece
+            }
+        } else {
+            when (file) {
+                File.FILE_D -> Piece(PieceType.R, white)
+                File.FILE_A -> null
+                else -> defaultPiece
+            }
+        }
+    }
+
+    private fun enPassant(target: Square, file: File, rank: Rank, defaultPiece: Piece?): Piece? {
+        if (target.file != file) {
+            return defaultPiece
+        }
+        if (target.rank == Rank.RANK_3 && rank == Rank.RANK_4 || target.rank == Rank.RANK_6 && rank == Rank.RANK_5) {
+            return null
         }
         return defaultPiece
     }
@@ -55,14 +104,6 @@ object MoveMaker {
         }
     }
 
-    private fun kingMoved(move: Move, board: Board): Collection<CastlingOption> {
-        return if (move.piece.white) {
-            remove(board, CastlingOption.WHITE_K, CastlingOption.WHITE_Q)
-        } else {
-            remove(board, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
-        }
-    }
-
     private fun rookMoved(move: Move, board: Board): Collection<CastlingOption> {
         return when (move.from.file) {
             File.FILE_A -> remove(board, if (move.piece.white) CastlingOption.WHITE_Q else CastlingOption.BLACK_Q)
@@ -71,9 +112,16 @@ object MoveMaker {
         }
     }
 
+    private fun kingMoved(move: Move, board: Board): Collection<CastlingOption> {
+        return if (move.piece.white) {
+            remove(board, CastlingOption.WHITE_K, CastlingOption.WHITE_Q)
+        } else {
+            remove(board, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
+        }
+    }
+
     private fun remove(board: Board, vararg castlingOptions: CastlingOption) =
         board.castlingOptions.filterNot { castlingOptions.contains(it) }
-
 
     private fun updatePlies(board: Board, move: Move): UInt {
         if (move.piece.type == PieceType.P || board[move.to] != null) {
