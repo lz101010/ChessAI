@@ -33,7 +33,7 @@ class BoardGeneratorTest {
             .move(OpeningMoves.E4)
             .move(OpeningMoves.Nf6)
             .move(OpeningMoves.D4)
-            .move(Move(N.asBlack, Square.F6, Square.E4))
+            .move(Move(Square.F6, Square.E4))
             .move(OpeningMoves.A3)
 
         assertThat(BoardGenerator.fromFen("rnbqkb1r/pppppppp/8/8/3Pn3/P7/1PP2PPP/RNBQKBNR b KQkq - 0 3"))

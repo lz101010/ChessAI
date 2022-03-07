@@ -5,7 +5,6 @@ package com.lz101010.chess.core
 
 import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Move
-import com.lz101010.chess.data.PieceType
 import com.lz101010.chess.data.Square
 import com.lz101010.chess.support.OpeningMoves
 import com.lz101010.chess.support.move
@@ -36,7 +35,7 @@ class SimpleScoreGeneratorTest {
     @Test
     fun boardAfterE4xD5Score_passes() {
         val board = Board.default
-            .move(OpeningMoves.E4).move(OpeningMoves.D5).move(Move(PieceType.P.asWhite, Square.E4, Square.D5))
+            .move(OpeningMoves.E4).move(OpeningMoves.D5).move(Move(Square.E4, Square.D5))
 
         assertThat(ScoreGenerator.simple(board)).isEqualTo(-1)
     }
@@ -46,8 +45,8 @@ class SimpleScoreGeneratorTest {
         val board = Board.default
             .move(OpeningMoves.E4)
             .move(OpeningMoves.D5)
-            .move(Move(PieceType.P.asWhite, Square.E4, Square.D5))
-            .move(Move(PieceType.Q.asBlack, Square.D8, Square.D5))
+            .move(Move(Square.E4, Square.D5))
+            .move(Move(Square.D8, Square.D5))
 
         assertThat(ScoreGenerator.simple(board)).isEqualTo(0)
     }

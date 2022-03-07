@@ -64,8 +64,8 @@ class MoveGeneratorTest {
 
         assertThat(MoveGenerator.find(board))
             .hasSize(29)
-            .containsAll(movesAfterE4E5().filterNot { it == Move(PieceType.B.asWhite, Square.F1, Square.A6) })
-            .contains(Move(PieceType.P.asWhite, Square.E4, Square.E5))
+            .containsAll(movesAfterE4E5().filterNot { it == Move(Square.F1, Square.A6) })
+            .contains(Move(Square.E4, Square.E5))
     }
 
     @Test
@@ -77,8 +77,8 @@ class MoveGeneratorTest {
         assertThat(MoveGenerator.find(board))
             .hasSize(31)
             .containsAll(movesAfterE4E5())
-            .contains(Move(PieceType.P.asWhite, Square.E4, Square.D5))
-            .contains(Move(PieceType.P.asWhite, Square.E4, Square.E5))
+            .contains(Move(Square.E4, Square.D5))
+            .contains(Move(Square.E4, Square.E5))
     }
 
     @Test
@@ -101,8 +101,8 @@ class MoveGeneratorTest {
         assertThat(MoveGenerator.find(board))
             .hasSize(31)
             .containsAll(movesAfterE4E5())
-            .contains(Move(PieceType.P.asWhite, Square.E4, Square.F5))
-            .contains(Move(PieceType.P.asWhite, Square.E4, Square.E5))
+            .contains(Move(Square.E4, Square.F5))
+            .contains(Move(Square.E4, Square.E5))
     }
 
     @ParameterizedTest
@@ -118,7 +118,7 @@ class MoveGeneratorTest {
         assertThat(MoveGenerator.find(board))
             .hasSize(30)
             .containsAll(movesAfterE4E5())
-            .contains(Move(PieceType.P.asWhite, Square.E4, Square.E5))
+            .contains(Move(Square.E4, Square.E5))
     }
 
     @Test
@@ -126,10 +126,10 @@ class MoveGeneratorTest {
         val board = BoardGenerator.fromFen("8/2P5/4K3/8/8/1k6/8/8 w - - 0 1")
         assertThat(MoveGenerator.find(board))
             .hasSize(12)
-            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.Q))
-            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.R))
-            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.B))
-            .contains(Move(PieceType.P.asWhite, Square.C7, Square.C8, PieceType.N))
+            .contains(Move(Square.C7, Square.C8, PieceType.Q))
+            .contains(Move(Square.C7, Square.C8, PieceType.R))
+            .contains(Move(Square.C7, Square.C8, PieceType.B))
+            .contains(Move(Square.C7, Square.C8, PieceType.N))
     }
 
     @Test
@@ -137,8 +137,8 @@ class MoveGeneratorTest {
         val board = BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1")
 
         assertThat(MoveGenerator.find(board))
-            .contains(Move(PieceType.K.asWhite, Square.E1, Square.G1))
-            .contains(Move(PieceType.K.asWhite, Square.E1, Square.C1))
+            .contains(Move(Square.E1, Square.G1))
+            .contains(Move(Square.E1, Square.C1))
     }
 
     @Test
@@ -146,7 +146,7 @@ class MoveGeneratorTest {
         val board = BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4p3/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3")
 
         assertThat(MoveGenerator.find(board))
-            .contains(Move(PieceType.P.asWhite, Square.E5, Square.F6))
+            .contains(Move(Square.E5, Square.F6))
     }
 
     companion object {
@@ -197,17 +197,17 @@ class MoveGeneratorTest {
                 OpeningMoves.Nc3,
                 OpeningMoves.Nf3,
                 OpeningMoves.Nh3,
-                Move(PieceType.N.asWhite, Square.G1, Square.E2),
-                Move(PieceType.B.asWhite, Square.F1, Square.E2),
-                Move(PieceType.B.asWhite, Square.F1, Square.D3),
-                Move(PieceType.B.asWhite, Square.F1, Square.C4),
-                Move(PieceType.B.asWhite, Square.F1, Square.B5),
-                Move(PieceType.B.asWhite, Square.F1, Square.A6),
-                Move(PieceType.Q.asWhite, Square.D1, Square.E2),
-                Move(PieceType.Q.asWhite, Square.D1, Square.F3),
-                Move(PieceType.Q.asWhite, Square.D1, Square.G4),
-                Move(PieceType.Q.asWhite, Square.D1, Square.H5),
-                Move(PieceType.K.asWhite, Square.E1, Square.E2)
+                Move(Square.G1, Square.E2),
+                Move(Square.F1, Square.E2),
+                Move(Square.F1, Square.D3),
+                Move(Square.F1, Square.C4),
+                Move(Square.F1, Square.B5),
+                Move(Square.F1, Square.A6),
+                Move(Square.D1, Square.E2),
+                Move(Square.D1, Square.F3),
+                Move(Square.D1, Square.G4),
+                Move(Square.D1, Square.H5),
+                Move(Square.E1, Square.E2)
             )
         }
     }

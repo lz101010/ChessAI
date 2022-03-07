@@ -59,7 +59,7 @@ class FenGeneratorTest {
             .move(OpeningMoves.E4)
             .move(OpeningMoves.Nf6)
             .move(OpeningMoves.D4)
-            .move(Move(PieceType.N.asBlack, Square.F6, Square.E4))
+            .move(Move(Square.F6, Square.E4))
 
         assertThat(FenGenerator.generate(board))
             .isEqualTo("rnbqkb1r/pppppppp/8/8/3Pn3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3")

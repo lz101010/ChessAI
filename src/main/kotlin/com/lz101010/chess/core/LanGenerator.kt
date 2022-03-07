@@ -16,7 +16,8 @@ object LanGenerator {
 
     private class State(var board: Board, val moves: MutableList<String> = mutableListOf()) {
         fun move(move: Move, index: Int): State {
-            val movePretty = castling(board, move) ?: move.pretty
+            val piece = board[move.from] ?: throw IllegalArgumentException("${move.from} is empty")
+            val movePretty = castling(board, move) ?: "${piece.pretty}$move"
             val whiteToMove = index % 2 == 0
 
             board = MoveMaker.move(board, move)

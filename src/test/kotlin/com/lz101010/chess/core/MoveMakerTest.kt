@@ -31,25 +31,25 @@ class MoveMakerTest {
     @Test
     fun moveBf1e2_fails() {
         assertThrows<IllegalArgumentException> {
-            Board.default.move(Move(PieceType.B.asWhite, from = Square.F1, to = Square.E2))
+            Board.default.move(Move(Square.F1, Square.E2))
         }.let {
             assertThat(it.message).isEqualTo("${Square.E2} is occupied by same color piece")
         }
     }
 
     @Test
-    fun moveNf1e3_fails() {
+    fun moveF3E3_fails() {
         assertThrows<IllegalArgumentException> {
-            Board.default.move(Move(PieceType.N.asWhite, from = Square.F1, to = Square.E3))
+            Board.default.move(Move(Square.F3, Square.E3))
         }.let {
-            assertThat(it.message).isEqualTo("${PieceType.B.asWhite} != ${PieceType.N.asWhite}")
+            assertThat(it.message).isEqualTo("f3 is empty")
         }
     }
 
     @Test
     fun moveNg8f6_fails() {
         assertThrows<IllegalArgumentException> {
-            Board.default.move(Move(PieceType.N.asBlack, from = Square.G8, to = Square.F6))
+            Board.default.move(Move(Square.G8, Square.F6))
         }.let {
             assertThat(it.message).isEqualTo("white to move")
         }
@@ -71,7 +71,7 @@ class MoveMakerTest {
         val board = Board.default
             .move(OpeningMoves.E4)
             .move(OpeningMoves.E5)
-            .move(Move(PieceType.K.asWhite, from = Square.E1, to = Square.E2))
+            .move(Move(Square.E1, Square.E2))
 
         assertThat(board.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
@@ -82,7 +82,7 @@ class MoveMakerTest {
         val board = Board.default
             .move(OpeningMoves.H4)
             .move(OpeningMoves.E5)
-            .move(Move(PieceType.R.asWhite, from = Square.H1, to = Square.H2))
+            .move(Move(Square.H1, Square.H2))
 
         assertThat(board.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.WHITE_Q, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
@@ -93,7 +93,7 @@ class MoveMakerTest {
         val board = Board.default
             .move(OpeningMoves.A4)
             .move(OpeningMoves.E5)
-            .move(Move(PieceType.R.asWhite, from = Square.A1, to = Square.A2))
+            .move(Move(Square.A1, Square.A2))
 
         assertThat(board.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
@@ -104,11 +104,11 @@ class MoveMakerTest {
         val board = Board.default
             .move(OpeningMoves.A4)
             .move(OpeningMoves.E5)
-            .move(Move(PieceType.R.asWhite, from = Square.A1, to = Square.A3))
+            .move(Move(Square.A1, Square.A3))
             .move(OpeningMoves.D5)
-            .move(Move(PieceType.R.asWhite, from = Square.A3, to = Square.B3))
+            .move(Move(Square.A3, Square.B3))
             .move(OpeningMoves.F5)
-            .move(Move(PieceType.R.asWhite, from = Square.B3, to = Square.H3))
+            .move(Move(Square.B3, Square.H3))
 
         assertThat(board.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.BLACK_K, CastlingOption.BLACK_Q)
@@ -120,7 +120,7 @@ class MoveMakerTest {
             .move(OpeningMoves.E4)
             .move(OpeningMoves.E5)
             .move(OpeningMoves.D4)
-            .move(Move(PieceType.K.asBlack, from = Square.E8, to = Square.E7))
+            .move(Move(Square.E8, Square.E7))
 
         assertThat(board.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.WHITE_Q)
@@ -132,7 +132,7 @@ class MoveMakerTest {
             .move(OpeningMoves.E4)
             .move(OpeningMoves.H5)
             .move(OpeningMoves.D4)
-            .move(Move(PieceType.R.asBlack, from = Square.H8, to = Square.H7))
+            .move(Move(Square.H8, Square.H7))
 
         assertThat(board.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.WHITE_Q, CastlingOption.BLACK_Q)
@@ -144,7 +144,7 @@ class MoveMakerTest {
             .move(OpeningMoves.E4)
             .move(OpeningMoves.A5)
             .move(OpeningMoves.D4)
-            .move(Move(PieceType.R.asBlack, from = Square.A8, to = Square.A7))
+            .move(Move(Square.A8, Square.A7))
 
         assertThat(board.castlingOptions)
             .containsExactlyInAnyOrder(CastlingOption.WHITE_K, CastlingOption.WHITE_Q, CastlingOption.BLACK_K)
@@ -155,8 +155,8 @@ class MoveMakerTest {
         val board = Board.default
             .move(OpeningMoves.E4)
             .move(OpeningMoves.E5)
-            .move(Move(PieceType.K.asWhite, from = Square.E1, to = Square.E2))
-            .move(Move(PieceType.K.asBlack, from = Square.E8, to = Square.E7))
+            .move(Move(Square.E1, Square.E2))
+            .move(Move(Square.E8, Square.E7))
 
         assertThat(board.castlingOptions).isEmpty()
     }
@@ -236,7 +236,7 @@ class MoveMakerTest {
     @Test
     fun promotion_passes() {
         val board = BoardGenerator.fromFen("8/2P5/4K3/8/8/1k6/8/8 w - - 0 1")
-            .move(Move(PieceType.P.asWhite, Square.C7, Square.C8, promotion = PieceType.Q))
+            .move(Move(Square.C7, Square.C8, promotion = PieceType.Q))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("2Q5/8/4K3/8/8/1k6/8/8 b - - 0 1"))
     }
@@ -244,7 +244,7 @@ class MoveMakerTest {
     @Test
     fun castlingKingSideWhite_passes() {
         val board = BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1")
-            .move(Move(PieceType.K.asWhite, Square.E1, Square.G1))
+            .move(Move(Square.E1, Square.G1))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R4RK1 b - - 1 1"))
     }
@@ -252,7 +252,7 @@ class MoveMakerTest {
     @Test
     fun castlingKingSideBlack_passes() {
         val board = BoardGenerator.fromFen("r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1")
-            .move(Move(PieceType.K.asBlack, Square.E8, Square.G8))
+            .move(Move(Square.E8, Square.G8))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("r4rk1/8/8/8/8/8/8/4K3 w - - 1 2"))
     }
@@ -260,7 +260,7 @@ class MoveMakerTest {
     @Test
     fun castlingQueenSideWhite_passes() {
         val board = BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1")
-            .move(Move(PieceType.K.asWhite, Square.E1, Square.C1))
+            .move(Move(Square.E1, Square.C1))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("4k3/8/8/8/8/8/8/2KR3R b - - 1 1"))
     }
@@ -268,7 +268,7 @@ class MoveMakerTest {
     @Test
     fun castlingQueenSideBlack_passes() {
         val board = BoardGenerator.fromFen("r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1")
-            .move(Move(PieceType.K.asBlack, Square.E8, Square.C8))
+            .move(Move(Square.E8, Square.C8))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("2kr3r/8/8/8/8/8/8/4K3 w - - 1 2"))
     }
@@ -276,7 +276,7 @@ class MoveMakerTest {
     @Test
     fun enPassantCaptureWhite_passes() {
         val board = BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4p3/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3")
-            .move(Move(PieceType.P.asWhite, Square.E5, Square.F6))
+            .move(Move(Square.E5, Square.F6))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4pP2/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3"))
     }
@@ -284,7 +284,7 @@ class MoveMakerTest {
     @Test
     fun enPassantCaptureBlack_passes() {
         val board = BoardGenerator.fromFen("rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 3")
-            .move(Move(PieceType.P.asBlack, Square.D4, Square.E3))
+            .move(Move(Square.D4, Square.E3))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("rnbqkbnr/ppp1pppp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 4"))
     }
