@@ -288,4 +288,36 @@ class MoveMakerTest {
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("rnbqkbnr/ppp1pppp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 4"))
     }
+
+    @Test
+    fun rookMovingAndCapturePreventsCastlingQk_passes() {
+        val board = Board.default
+            .move(OpeningMoves.A4)
+            .move(OpeningMoves.H5)
+            .move(OpeningMoves.G4)
+            .move(Move(Square.H5, Square.G4))
+            .move(Move(Square.A1, Square.A3))
+            .move(OpeningMoves.G5)
+            .move(Move(Square.A3, Square.H3))
+            .move(OpeningMoves.F5)
+            .move(Move(Square.H3, Square.H8))
+
+        assertThat(board)
+            .isEqualTo(BoardGenerator.fromFen("rnbqkbnR/ppppp3/8/5pp1/P5p1/8/1PPPPP1P/1NBQKBNR b Kq - 0 5"))
+    }
+
+    @Test
+    fun rookMovingAndCapturePreventsCastlingQq_passes() {
+        val board = Board.default
+            .move(OpeningMoves.A4)
+            .move(OpeningMoves.A5)
+            .move(OpeningMoves.B4)
+            .move(OpeningMoves.B5)
+            .move(Move(Square.A4, Square.B5))
+            .move(Move(Square.A5, Square.B4))
+            .move(Move(Square.A1, Square.A8))
+
+        assertThat(board)
+            .isEqualTo(BoardGenerator.fromFen("Rnbqkbnr/2pppppp/8/1P6/1p6/8/2PPPPPP/1NBQKBNR b Kk - 0 4"))
+    }
 }

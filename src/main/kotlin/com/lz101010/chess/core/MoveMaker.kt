@@ -99,19 +99,37 @@ object MoveMaker {
     }
 
     private fun updateCastlingOptions(board: Board, move: Move, movedPiece: Piece): Collection<CastlingOption> {
-        return when (movedPiece.type) {
-            PieceType.R -> rookMoved(move, board, movedPiece.white)
-            PieceType.K -> kingMoved(board, movedPiece.white)
-            else -> board.castlingOptions
+        val sameSide = newCastlingOptionsSameSide(board, move, movedPiece)
+        val otherSide = rookCaptured(board, move, movedPiece.black)
+
+        return if (sameSide != null) {
+            if (otherSide != null) sameSide.intersect(otherSide.toSet()) else sameSide
+        } else {
+            otherSide ?: board.castlingOptions
         }
     }
 
-    private fun rookMoved(move: Move, board: Board, white: Boolean): Collection<CastlingOption> {
+    private fun newCastlingOptionsSameSide(board: Board, move: Move, movedPiece: Piece): Collection<CastlingOption>? {
+        return when (movedPiece.type) {
+            PieceType.R -> rookMoved(board, move, movedPiece.white)
+            PieceType.K -> kingMoved(board, movedPiece.white)
+            else -> null
+        }
+    }
+
+    private fun rookMoved(board: Board, move: Move, white: Boolean): Collection<CastlingOption>? {
+        if (!isBackRow(move.from.rank, white)) {
+            return null
+        }
         return when (move.from.file) {
             File.FILE_A -> remove(board, if (white) CastlingOption.WHITE_Q else CastlingOption.BLACK_Q)
             File.FILE_H -> remove(board, if (white) CastlingOption.WHITE_K else CastlingOption.BLACK_K)
-            else -> board.castlingOptions
+            else -> null
         }
+    }
+
+    private fun isBackRow(rank: Rank, white: Boolean): Boolean {
+        return if (white) rank == Rank.RANK_1 else rank == Rank.RANK_8
     }
 
     private fun kingMoved(board: Board, white: Boolean): Collection<CastlingOption> {
@@ -124,6 +142,18 @@ object MoveMaker {
 
     private fun remove(board: Board, vararg castlingOptions: CastlingOption) =
         board.castlingOptions.filterNot { castlingOptions.contains(it) }
+
+    private fun rookCaptured(board: Board, move: Move, white: Boolean): Collection<CastlingOption>? {
+        val piece = board[move.to]
+        if (piece == null || piece.type != PieceType.R || !isBackRow(move.to.rank, white)) {
+            return null
+        }
+        return when (move.to.file) {
+            File.FILE_A -> remove(board, if (white) CastlingOption.WHITE_Q else CastlingOption.BLACK_Q)
+            File.FILE_H -> remove(board, if (white) CastlingOption.WHITE_K else CastlingOption.BLACK_K)
+            else -> null
+        }
+    }
 
     private fun updatePlies(board: Board, move: Move, movedPiece: Piece): UInt {
         if (movedPiece.type == PieceType.P || board[move.to] != null) {
