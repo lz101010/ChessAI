@@ -65,7 +65,7 @@ class LanGeneratorTest {
     }
 
     @Test
-    fun foolsMateLan_passes() {
+    fun foolsMateWhiteLan_passes() {
         assertThat(LanGenerator.generate(after(OpeningMoves.F3)))
             .isEqualTo("1. ♙f2f3 *")
         assertThat(LanGenerator.generate(after(OpeningMoves.F3, OpeningMoves.E5)))
@@ -81,6 +81,34 @@ class LanGeneratorTest {
             .isEqualTo("""
                 1. ♙f2f3 ♟e7e5
                 2. ♙g2g4 ♛d8h4#
+                0-1
+            """.trimIndent())
+    }
+
+    @Test
+    fun foolsMateBlackLan_passes() {
+        assertThat(LanGenerator.generate(after(OpeningMoves.E4)))
+            .isEqualTo("1. ♙e2e4 *")
+        assertThat(LanGenerator.generate(after(OpeningMoves.E4, OpeningMoves.F6)))
+            .isEqualTo("1. ♙e2e4 ♟f7f6")
+        assertThat(LanGenerator.generate(after(OpeningMoves.E4, OpeningMoves.F6, OpeningMoves.D4)))
+            .isEqualTo("""
+                1. ♙e2e4 ♟f7f6
+                2. ♙d2d4 *
+            """.trimIndent())
+        assertThat(LanGenerator.generate(after(OpeningMoves.E4, OpeningMoves.F6, OpeningMoves.D4, OpeningMoves.G5)))
+            .isEqualTo("""
+                1. ♙e2e4 ♟f7f6
+                2. ♙d2d4 ♟g7g5
+            """.trimIndent())
+
+        val qH5 = Move(PieceType.Q.asWhite, Square.D1, Square.H5)
+        assertThat(LanGenerator.generate(after(OpeningMoves.E4, OpeningMoves.F6, OpeningMoves.D4, OpeningMoves.G5, qH5)))
+            .isEqualTo("""
+                1. ♙e2e4 ♟f7f6
+                2. ♙d2d4 ♟g7g5
+                3. ♕d1h5#
+                1-0
             """.trimIndent())
     }
 
@@ -108,6 +136,18 @@ class LanGeneratorTest {
 
         assertThat(LanGenerator.generate(after(ooo, oo), board))
             .isEqualTo("1. O-O-O o-o")
+    }
+
+    @Test
+    fun staleMatePasses() {
+        val board = BoardGenerator.fromFen("k1K5/8/5p1Q/5P2/8/8/8/8 w - - 0 1")
+        val move = Move(PieceType.Q.asWhite, Square.H6, Square.H7)
+
+        assertThat(LanGenerator.generate(after(move), board))
+            .isEqualTo("""
+                1. ♕h6h7
+                0.5-0.5
+            """.trimIndent())
     }
 
     private fun after(vararg moves: Move): Game {

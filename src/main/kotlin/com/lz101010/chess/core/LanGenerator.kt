@@ -20,16 +20,15 @@ object LanGenerator {
             val whiteToMove = index % 2 == 0
 
             board = MoveMaker.move(board, move)
-            val suffix = makeSuffix(board)
-
-            // TODO: add result (1-0, 0-1, 0.5-0.5)
-            // TODO: remove Move.piece
+            val suffix = checkSuffix(board)
+            val gameResult = gameResult(board)
 
             if (whiteToMove) {
-                moves.add("${1 + index / 2}. ${movePretty}$suffix *")
+                moves.add("${1 + index / 2}. ${movePretty}$suffix${if (gameResult == null) " *" else ""}")
             } else {
                 moves.add("${moves.removeLast().dropLast(1)}${movePretty}$suffix")
             }
+            gameResult(board)?.let(moves::add)
             return this
         }
 
@@ -46,7 +45,7 @@ object LanGenerator {
             return null
         }
 
-        private fun makeSuffix(board: Board): String {
+        private fun checkSuffix(board: Board): String {
             if (PositionEvaluator.isMate(board)) {
                 return "#"
             }
@@ -54,6 +53,16 @@ object LanGenerator {
                 return "+"
             }
             return ""
+        }
+
+        private fun gameResult(board: Board): String? {
+            if (PositionEvaluator.isMate(board)) {
+                return if (board.whiteToMove) "0-1" else "1-0"
+            }
+            if (PositionEvaluator.isStaleMate(board)) {
+                return "0.5-0.5"
+            }
+            return null
         }
     }
 }
