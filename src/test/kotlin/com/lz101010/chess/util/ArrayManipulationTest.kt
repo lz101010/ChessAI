@@ -5,6 +5,7 @@ package com.lz101010.chess.util
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class ArrayManipulationTest {
     @Test
@@ -63,5 +64,11 @@ class ArrayManipulationTest {
         assertThat(ArrayManipulation.mirror(pieceTable).toList())
             .hasSize(pieceTable.size)
             .containsSequence(rotatedTable.toList())
+    }
+
+    @Test
+    fun badArray_fails() {
+        assertThrows<IllegalArgumentException> { ArrayManipulation.mirror(arrayOf()) }
+        assertThrows<IllegalArgumentException> { ArrayManipulation.rotate(arrayOf()) }
     }
 }

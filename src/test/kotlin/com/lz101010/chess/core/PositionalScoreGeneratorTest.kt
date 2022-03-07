@@ -76,6 +76,12 @@ class PositionalScoreGeneratorTest {
         assertThat(score("K7/8/5rqk/8/8/8/8/8 w - - 0 1")).isEqualTo(-20)
         assertThat(score("k7/8/5PQK/8/8/8/8/8 w - - 0 1")).isEqualTo(-30) // absurd, but constructed
         assertThat(score("K7/8/5pqk/8/8/8/8/8 w - - 0 1")).isEqualTo(-10)
+        assertThat(score("K7/6rk/8/8/8/8/8/8 w - - 0 1")).isEqualTo(-20)
+        assertThat(score("k7/6RK/8/8/8/8/8/8 w - - 0 1")).isEqualTo(30)
+        assertThat(score("K7/6pk/8/8/8/8/8/8 w - - 0 1")).isEqualTo(-30)
+        assertThat(score("k7/6PK/8/8/8/8/8/8 w - - 0 1")).isEqualTo(70)
+        assertThat(score("K7/5bbk/8/8/8/8/8/8 w - - 0 1")).isEqualTo(-25)
+        assertThat(score("k7/5BBK/8/8/8/8/8/8 w - - 0 1")).isEqualTo(20)
     }
 
     private fun score(fen: String): Int {
