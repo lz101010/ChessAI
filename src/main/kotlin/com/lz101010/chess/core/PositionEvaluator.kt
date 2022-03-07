@@ -6,13 +6,11 @@ package com.lz101010.chess.core
 import com.lz101010.chess.data.*
 
 object PositionEvaluator {
-    fun isMate(board: Board): Boolean {
-        return isCheck(board) && noMovesLeft(board)
-    }
+    fun isOver(board: Board): Boolean = isMate(board) || isStaleMate(board)
 
-    fun isStaleMate(board: Board): Boolean {
-        return !isCheck(board) && noMovesLeft(board)
-    }
+    fun isMate(board: Board): Boolean = isCheck(board) && noMovesLeft(board)
+
+    fun isStaleMate(board: Board): Boolean = (!isCheck(board) && noMovesLeft(board)) || board.plies >= 100u
 
     fun isCheck(board: Board): Boolean {
         val target = find(Piece(PieceType.K, board.whiteToMove), board).first()
