@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.notation
+package com.lz101010.chess.game
 
 import com.lz101010.chess.core.MoveEvaluator
 import com.lz101010.chess.core.MoveMaker
@@ -9,7 +9,7 @@ import com.lz101010.chess.core.PositionEvaluator
 import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Move
 
-class GameState(
+internal class GameState(
     private var board: Board,
     val moves: MutableList<String> = mutableListOf(),
     private val prettyPiece: Boolean = true,

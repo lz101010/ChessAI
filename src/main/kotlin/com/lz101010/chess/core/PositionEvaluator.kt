@@ -6,8 +6,6 @@ package com.lz101010.chess.core
 import com.lz101010.chess.data.*
 
 object PositionEvaluator {
-    fun isOver(board: Board): Boolean = isMate(board) || isStaleMate(board)
-
     fun isMate(board: Board): Boolean = isCheck(board) && noMovesLeft(board)
 
     fun isStaleMate(board: Board): Boolean = (!isCheck(board) && noMovesLeft(board)) || board.plies >= 100u

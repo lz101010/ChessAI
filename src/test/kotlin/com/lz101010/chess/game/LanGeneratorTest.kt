@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.notation
+package com.lz101010.chess.game
 
 import com.lz101010.chess.core.BoardGenerator
-import com.lz101010.chess.data.Game
+import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Move
 import com.lz101010.chess.data.Square
 import com.lz101010.chess.support.OpeningMoves
@@ -124,10 +124,10 @@ class LanGeneratorTest {
         val oo = Move(Square.E1, Square.G1)
         val ooo = Move(Square.E8, Square.C8)
 
-        assertThat(LanGenerator.generate(after(oo), board))
+        assertThat(LanGenerator.generate(after(board, oo)))
             .isEqualTo("1. O-O *")
 
-        assertThat(LanGenerator.generate(after(oo, ooo), board))
+        assertThat(LanGenerator.generate(after(board, oo, ooo)))
             .isEqualTo("1. O-O o-o-o")
     }
 
@@ -137,10 +137,10 @@ class LanGeneratorTest {
         val ooo = Move(Square.E1, Square.C1)
         val oo = Move(Square.E8, Square.G8)
 
-        assertThat(LanGenerator.generate(after(ooo), board))
+        assertThat(LanGenerator.generate(after(board, ooo)))
             .isEqualTo("1. O-O-O *")
 
-        assertThat(LanGenerator.generate(after(ooo, oo), board))
+        assertThat(LanGenerator.generate(after(board ,ooo, oo)))
             .isEqualTo("1. O-O-O o-o")
     }
 
@@ -149,7 +149,7 @@ class LanGeneratorTest {
         val board = BoardGenerator.fromFen("k1K5/8/5p1Q/5P2/8/8/8/8 w - - 0 1")
         val move = Move(Square.H6, Square.H7)
 
-        assertThat(LanGenerator.generate(after(move), board))
+        assertThat(LanGenerator.generate(after(board, move)))
             .isEqualTo("""
                 1. ♕h6h7
                 0.5-0.5
@@ -157,6 +157,10 @@ class LanGeneratorTest {
     }
 
     private fun after(vararg moves: Move): Game {
-        return Game(moves.toList())
+        return after(board = Board.default, moves = moves)
+    }
+
+    private fun after(board: Board = Board.default, vararg moves: Move): Game {
+        return Game(board, moves.toMutableList())
     }
 }

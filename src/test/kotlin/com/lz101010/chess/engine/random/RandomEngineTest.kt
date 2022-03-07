@@ -3,12 +3,7 @@
 
 package com.lz101010.chess.engine.random
 
-import com.lz101010.chess.notation.LanGenerator
-import com.lz101010.chess.core.PositionEvaluator
-import com.lz101010.chess.data.Board
-import com.lz101010.chess.data.Game
-import com.lz101010.chess.data.Move
-import com.lz101010.chess.support.move
+import com.lz101010.chess.game.Game
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,20 +15,15 @@ class RandomEngineTest {
         val engineWhite = RandomEngine
         val engineBlack = RandomEngine
 
-        var board = Board.default
-        val moves = mutableListOf<Move>()
+        val game = Game()
+        while (game.moves.size < MAX_MOVES && !game.isOver()) {
+            val engine = if (game.whiteToMove()) engineWhite else engineBlack
 
-        var moveCount = 0
-        while (moveCount < MAX_MOVES && !PositionEvaluator.isOver(board)) {
-            val engine = if (board.whiteToMove) engineWhite else engineBlack
-
-            val nextMove = engine.nextMove(board)
-            moves.add(nextMove)
-            board = board.move(nextMove)
-            moveCount++
+            val nextMove = game.findMove(engine)
+            game.move(nextMove)
         }
 
-        assertThat(moveCount).isLessThan(MAX_MOVES)
-        println(LanGenerator.generate(Game(moves)))
+        println(game.lan())
+        assertThat(game.moves.size).isLessThan(MAX_MOVES)
     }
 }
