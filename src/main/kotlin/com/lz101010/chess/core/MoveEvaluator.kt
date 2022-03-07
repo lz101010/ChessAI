@@ -56,4 +56,24 @@ object MoveEvaluator {
     }
 
     private data class AugmentedPiece(val pieceType: PieceType, val bishopColor: Boolean?)
+
+    fun isKingSideCastleWhite(board: Board, move: Move): Boolean {
+        val piece = board[move.from] ?: return false
+        return piece.white && piece.type == PieceType.K && move.from == Square.E1 && move.to == Square.G1
+    }
+
+    fun isKingSideCastleBlack(board: Board, move: Move): Boolean {
+        val piece = board[move.from] ?: return false
+        return piece.black && piece.type == PieceType.K && move.from == Square.E8 && move.to == Square.G8
+    }
+
+    fun isQueenSideCastleWhite(board: Board, move: Move): Boolean {
+        val piece = board[move.from] ?: return false
+        return piece.white && piece.type == PieceType.K && move.from == Square.E1 && move.to == Square.C1
+    }
+
+    fun isQueenSideCastleBlack(board: Board, move: Move): Boolean {
+        val piece = board[move.from] ?: return false
+        return piece.black && piece.type == PieceType.K && move.from == Square.E8 && move.to == Square.C8
+    }
 }

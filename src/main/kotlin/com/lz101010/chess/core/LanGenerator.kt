@@ -8,27 +8,42 @@ import com.lz101010.chess.data.Game
 import com.lz101010.chess.data.Move
 
 object LanGenerator {
-    fun generate(game: Game): String {
+    fun generate(game: Game, board: Board = Board.default): String {
         return game.moves
-            .foldIndexed(State()) { index, state, move -> state.move(move, index) }
+            .foldIndexed(State(board)) { index, state, move -> state.move(move, index) }
             .moves.joinToString("\n")
     }
 
-    private class State(var board: Board = Board.default, var moves: MutableList<String> = mutableListOf()) {
+    private class State(var board: Board, val moves: MutableList<String> = mutableListOf()) {
         fun move(move: Move, index: Int): State {
-            board = MoveMaker.move(board, move)
+            val movePretty = castling(board, move) ?: move.pretty
             val whiteToMove = index % 2 == 0
-            // TODO: add result (1-0, 0-1, 0.5-0.5)
-            // TODO: add castling (O-O, O-O-O)
-            // TODO: remove Move.piece
+
+            board = MoveMaker.move(board, move)
             val suffix = makeSuffix(board)
 
+            // TODO: add result (1-0, 0-1, 0.5-0.5)
+            // TODO: remove Move.piece
+
             if (whiteToMove) {
-                moves.add("${1 + index / 2}. ${move.pretty}$suffix *")
+                moves.add("${1 + index / 2}. ${movePretty}$suffix *")
             } else {
-                moves.add("${moves.removeLast().dropLast(1)}${move.pretty}$suffix")
+                moves.add("${moves.removeLast().dropLast(1)}${movePretty}$suffix")
             }
             return this
+        }
+
+        private fun castling(board: Board, move: Move): String? {
+            if (MoveEvaluator.isKingSideCastleWhite(board, move)) {
+                return "O-O"
+            } else if (MoveEvaluator.isQueenSideCastleWhite(board, move)) {
+                return "O-O-O"
+            } else if (MoveEvaluator.isKingSideCastleBlack(board, move)) {
+                return "o-o"
+            } else if (MoveEvaluator.isQueenSideCastleBlack(board, move)) {
+                return "o-o-o"
+            }
+            return null
         }
 
         private fun makeSuffix(board: Board): String {

@@ -84,6 +84,32 @@ class LanGeneratorTest {
             """.trimIndent())
     }
 
+    @Test
+    fun castling1_passes() {
+        val board = BoardGenerator.fromFen("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1")
+        val oo = Move(PieceType.K.asWhite, Square.E1, Square.G1)
+        val ooo = Move(PieceType.K.asBlack, Square.E8, Square.C8)
+
+        assertThat(LanGenerator.generate(after(oo), board))
+            .isEqualTo("1. O-O *")
+
+        assertThat(LanGenerator.generate(after(oo, ooo), board))
+            .isEqualTo("1. O-O o-o-o")
+    }
+
+    @Test
+    fun castling2_passes() {
+        val board = BoardGenerator.fromFen("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1")
+        val ooo = Move(PieceType.K.asWhite, Square.E1, Square.C1)
+        val oo = Move(PieceType.K.asBlack, Square.E8, Square.G8)
+
+        assertThat(LanGenerator.generate(after(ooo), board))
+            .isEqualTo("1. O-O-O *")
+
+        assertThat(LanGenerator.generate(after(ooo, oo), board))
+            .isEqualTo("1. O-O-O o-o")
+    }
+
     private fun after(vararg moves: Move): Game {
         return Game(moves.toList())
     }
