@@ -9,7 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 
 import org.junit.jupiter.api.Test
 
-class PositionEvaluatorTest {
+class MoveEvaluatorTest {
     @Test
     fun detectCheck_passes() {
         val move = Move(PieceType.Q.asWhite, Square.F5, Square.F8)
@@ -35,7 +35,7 @@ class PositionEvaluatorTest {
     fun detectTechnicalMateWithoutCheck_passes() {
         val move = Move(PieceType.K.asWhite, Square.F5, Square.F6)
 
-        //runAssertions("8/1k6/8/3NBK2/8/8/8/8 w - - 0 1", move, technicalMate = true)
+        runAssertions("8/1k6/8/3NBK2/8/8/8/8 w - - 0 1", move, technicalMate = true)
         runAssertions("8/1k6/8/4BK1B/8/8/8/8 w - - 0 1", move, technicalMate = true)
         runAssertions("8/1k6/8/3NNK2/8/8/8/8 w - - 0 1", move, technicalMate = true)
         runAssertions("8/1k6/8/4RK2/8/8/8/8 w - - 0 1", move, technicalMate = true)
@@ -87,10 +87,10 @@ class PositionEvaluatorTest {
         technicalDraw: Boolean = false
     ) {
         val board = BoardGenerator.fromFen(fen)
-        assertThat(PositionEvaluator.isCheck(board, move)).isEqualTo(check)
-        assertThat(PositionEvaluator.isMate(board, move)).isEqualTo(mate)
-        assertThat(PositionEvaluator.isTechnicalMate(board, move)).isEqualTo(technicalMate)
-        assertThat(PositionEvaluator.isStaleMate(board, move)).isEqualTo(staleMate)
-        assertThat(PositionEvaluator.isTechnicalDraw(board, move)).isEqualTo(technicalDraw)
+        assertThat(MoveEvaluator.isCheck(board, move)).isEqualTo(check)
+        assertThat(MoveEvaluator.isMate(board, move)).isEqualTo(mate)
+        assertThat(MoveEvaluator.isTechnicalMate(board, move)).isEqualTo(technicalMate)
+        assertThat(MoveEvaluator.isStaleMate(board, move)).isEqualTo(staleMate)
+        assertThat(MoveEvaluator.isTechnicalDraw(board, move)).isEqualTo(technicalDraw)
     }
 }
