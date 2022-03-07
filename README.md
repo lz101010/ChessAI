@@ -11,16 +11,16 @@ This project is mostly for fun and doesn't take itself too seriously. For instan
 
 # Scope
 Some planned features are:
-- all games start with e4
-- input: board in FEN format, output: next move in long algebraic notation (semi-deterministic)
-- opening book (borrowing from publicly available resources)
-- endgame tablebases (borrowing from public APIs such as lichess)
-- search depth of 5-6 half moves
-- determine the engine's ELO (e.g., by repeatedly playing against lichess)
+- all games start with [e4](https://en.wikibooks.org/wiki/Chess_Opening_Theory/1._e4)
+- input: board formatted in [FEN](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation), output: next move formatted in [LAN](https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#Long_algebraic_notation) (semi-deterministic)
+- [opening book](https://www.chessprogramming.org/Opening_Book) (borrowing from publicly available resources)
+- [endgame tablebases](https://www.chessprogramming.org/Endgame_Tablebases) (borrowing from public APIs such as [lichess](https://lichess.org/blog/W3WeMyQAACQAdfAL/7-piece-syzygy-tablebases-are-complete))
+- [search depth](https://www.chessprogramming.org/Search) of 5-6 half moves
+- determine the engine's [ELO](https://en.wikipedia.org/wiki/Elo_rating_system) (e.g., by repeatedly playing against lichess)
 
 In particular, certain features one might expect aren't directly supported through the API:
 - difficulty settings
 - evaluation bar
 - hints
-- premoves
-- UCI (Universal Chess Protocol)
+- [premoves](https://en.wikipedia.org/wiki/Premove)
+- [UCI](https://en.wikipedia.org/wiki/Universal_Chess_Interface) (Universal Chess Protocol)
