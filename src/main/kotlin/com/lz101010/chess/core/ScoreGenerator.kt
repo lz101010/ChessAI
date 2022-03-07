@@ -90,7 +90,7 @@ object ScoreGenerator {
             PieceType.B -> bishopTable(piece)
             PieceType.R -> rookTable(piece)
             PieceType.Q -> queenTable(piece)
-            PieceType.K -> kingTable(endgame, piece)
+            PieceType.K -> kingTable(piece, endgame)
         }
     }
 
@@ -100,7 +100,7 @@ object ScoreGenerator {
     private fun rookTable(piece: Piece) = if (piece.white) ROOK_TABLE_WHITE else ROOK_TABLE_BLACK
     private fun queenTable(piece: Piece) = if (piece.white) QUEEN_TABLE_WHITE else QUEEN_TABLE_BLACK
 
-    private fun kingTable(endgame: Boolean, piece: Piece) = when (endgame) {
+    private fun kingTable(piece: Piece, endgame: Boolean) = when (endgame) {
         false -> if (piece.white) KING_MIDDLE_TABLE_WHITE else KING_MIDDLE_TABLE_BLACK
         true -> if (piece.white) KING_END_TABLE_WHITE else KING_END_TABLE_BLACK
     }
