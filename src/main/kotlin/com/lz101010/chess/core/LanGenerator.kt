@@ -18,16 +18,27 @@ object LanGenerator {
         fun move(move: Move, index: Int): State {
             board = MoveMaker.move(board, move)
             val whiteToMove = index % 2 == 0
-            // TODO: add check (+), mate (#)
             // TODO: add result (1-0, 0-1, 0.5-0.5)
             // TODO: add castling (O-O, O-O-O)
             // TODO: remove Move.piece
+            val suffix = makeSuffix(board)
+
             if (whiteToMove) {
-                moves.add("${1 + index / 2}. ${move.pretty} *")
+                moves.add("${1 + index / 2}. ${move.pretty}$suffix *")
             } else {
-                moves.add("${moves.removeLast().dropLast(1)}${move.pretty}")
+                moves.add("${moves.removeLast().dropLast(1)}${move.pretty}$suffix")
             }
             return this
+        }
+
+        private fun makeSuffix(board: Board): String {
+            if (PositionEvaluator.isMate(board)) {
+                return "#"
+            }
+            if (PositionEvaluator.isCheck(board)) {
+                return "+"
+            }
+            return ""
         }
     }
 }
