@@ -251,18 +251,10 @@ class MoveMakerTest {
 
     @Test
     fun castlingKingSideBlack_passes() {
-        val board = BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1")
-            .move(Move(PieceType.K.asWhite, Square.E1, Square.G1))
+        val board = BoardGenerator.fromFen("r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1")
+            .move(Move(PieceType.K.asBlack, Square.E8, Square.G8))
 
-        assertThat(board).isEqualTo(BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R4RK1 b - - 1 1"))
-    }
-
-    @Test
-    fun castlingQueenSideBlack_passes() {
-        val board = BoardGenerator.fromFen("4k3/8/8/8/8/8/8/R3K2R w KQ - 0 1")
-            .move(Move(PieceType.K.asWhite, Square.E1, Square.C1))
-
-        assertThat(board).isEqualTo(BoardGenerator.fromFen("4k3/8/8/8/8/8/8/2KR3R b - - 1 1"))
+        assertThat(board).isEqualTo(BoardGenerator.fromFen("r4rk1/8/8/8/8/8/8/4K3 w - - 1 2"))
     }
 
     @Test
@@ -274,10 +266,26 @@ class MoveMakerTest {
     }
 
     @Test
-    fun enPassantCapture_passes() {
+    fun castlingQueenSideBlack_passes() {
+        val board = BoardGenerator.fromFen("r3k2r/8/8/8/8/8/8/4K3 b kq - 0 1")
+            .move(Move(PieceType.K.asBlack, Square.E8, Square.C8))
+
+        assertThat(board).isEqualTo(BoardGenerator.fromFen("2kr3r/8/8/8/8/8/8/4K3 w - - 1 2"))
+    }
+
+    @Test
+    fun enPassantCaptureWhite_passes() {
         val board = BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4p3/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3")
             .move(Move(PieceType.P.asWhite, Square.E5, Square.F6))
 
         assertThat(board).isEqualTo(BoardGenerator.fromFen("rnbqkbnr/pppp2pp/4pP2/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3"))
+    }
+
+    @Test
+    fun enPassantCaptureBlack_passes() {
+        val board = BoardGenerator.fromFen("rnbqkbnr/ppp1pppp/8/8/3pP3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 3")
+            .move(Move(PieceType.P.asBlack, Square.D4, Square.E3))
+
+        assertThat(board).isEqualTo(BoardGenerator.fromFen("rnbqkbnr/ppp1pppp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 4"))
     }
 }
