@@ -8,7 +8,10 @@ data class Move(
     val to: Square,
     val promotion: PieceType? = null
 ) {
+    val san = "$to" + (promotion ?: "")
+    val lan = "$from$to" + (promotion ?: "")
+
     override fun toString(): String {
-        return "$from$to" + (promotion ?: "")
+        return lan
     }
 }
