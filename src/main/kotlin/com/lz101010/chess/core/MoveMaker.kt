@@ -20,8 +20,8 @@ object MoveMaker {
             pieces = pieces,
             whiteToMove = !board.whiteToMove,
             castlingOptions = updateCastlingOptions(board, move, movedPiece),
-            enPassant = updateEnPassant(board, move),
-            plies = updatePlies(board, move),
+            enPassant = updateEnPassant(move, movedPiece),
+            plies = updatePlies(board, move, movedPiece),
             nextMove = if (board.whiteToMove) board.nextMove else board.nextMove + 1u
         )
     }
@@ -125,17 +125,15 @@ object MoveMaker {
     private fun remove(board: Board, vararg castlingOptions: CastlingOption) =
         board.castlingOptions.filterNot { castlingOptions.contains(it) }
 
-    private fun updatePlies(board: Board, move: Move): UInt {
-        val piece = board[move.from] ?: throw IllegalArgumentException("${move.from} is empty")
-        if (piece.type == PieceType.P || board[move.to] != null) {
+    private fun updatePlies(board: Board, move: Move, movedPiece: Piece): UInt {
+        if (movedPiece.type == PieceType.P || board[move.to] != null) {
             return 0u
         }
         return board.plies + 1u
     }
 
-    private fun updateEnPassant(board: Board, move: Move): EnPassantOption? {
-        val piece = board[move.from] ?: throw IllegalArgumentException("${move.from} is empty")
-        if (piece.type != PieceType.P) {
+    private fun updateEnPassant(move: Move, movedPiece: Piece): EnPassantOption? {
+        if (movedPiece.type != PieceType.P) {
             return null
         }
         if (abs(move.from.rank.ordinal - move.to.rank.ordinal) != 2) {

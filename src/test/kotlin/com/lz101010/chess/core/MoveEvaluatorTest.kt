@@ -2,11 +2,14 @@
 // Copyright (c) 2022 Lukas Zeller
 
 package com.lz101010.chess.core
+import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Move
 import com.lz101010.chess.data.Square
 import org.assertj.core.api.Assertions.assertThat
 
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 class MoveEvaluatorTest {
     @Test
@@ -67,13 +70,41 @@ class MoveEvaluatorTest {
         runAssertions("6Kq/4k3/8/8/8/8/8/8 w - - 0 1", move, technicalDraw = true)
     }
 
-
     @Test
     fun detectNotTechnicalDraw_passes() {
         val move = Move(Square.G8, Square.H8)
 
         runAssertions("6K1/rk6/8/4N3/8/8/8/8 w - - 0 1", move, technicalDraw = false)
         runAssertions("6K1/rk6/8/4R3/8/8/8/8 w - - 0 1", move, technicalDraw = false)
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidCastlingMoves")
+    fun castlingWithInvalidMove_passes(move: Move) {
+        val board = BoardGenerator.fromFen("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1")
+
+        assertThat(MoveEvaluator.isKingSideCastleWhite(Board.default, move)).isFalse
+        assertThat(MoveEvaluator.isKingSideCastleBlack(Board.default, move)).isFalse
+        assertThat(MoveEvaluator.isQueenSideCastleWhite(Board.default, move)).isFalse
+        assertThat(MoveEvaluator.isQueenSideCastleBlack(Board.default, move)).isFalse
+
+        assertThat(MoveEvaluator.isKingSideCastleWhite(board, move)).isFalse
+        assertThat(MoveEvaluator.isKingSideCastleBlack(board, move)).isFalse
+        assertThat(MoveEvaluator.isQueenSideCastleWhite(board, move)).isFalse
+        assertThat(MoveEvaluator.isQueenSideCastleBlack(board, move)).isFalse
+    }
+
+    companion object {
+        @JvmStatic
+        private fun invalidCastlingMoves(): List<Move> {
+            return listOf(
+                Move(Square.A3, Square.A4),
+                Move(Square.A1, Square.A2),
+                Move(Square.A8, Square.A7),
+                Move(Square.E1, Square.E2),
+                Move(Square.E8, Square.E7)
+            )
+        }
     }
 
     private fun runAssertions(

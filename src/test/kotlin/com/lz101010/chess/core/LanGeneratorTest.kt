@@ -9,11 +9,17 @@ import com.lz101010.chess.data.Square
 import com.lz101010.chess.support.OpeningMoves
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class LanGeneratorTest {
     @Test
     fun defaultBoardLan_passes() {
         assertThat(LanGenerator.generate(after())).isBlank
+    }
+
+    @Test
+    fun badMoveLan_fails() {
+        assertThrows<IllegalArgumentException> { LanGenerator.generate(after(Move(Square.A3, Square.A4))) }
     }
 
     @Test
