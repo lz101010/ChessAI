@@ -12,11 +12,11 @@ object MoveGenerator {
 
         val moves = com.github.bhlangonijr.chesslib.move.MoveGenerator.generateLegalMoves(mappedBoard)
 
-        return moves.map { convert(it, board[convert(it.from)]!!) }
+        return moves.map(::convert)
     }
 
-    private fun convert(move: com.github.bhlangonijr.chesslib.move.Move, piece: Piece): Move {
-        return Move(piece, convert(move.from), convert(move.to), move.promotion.pieceType?.let(::convert))
+    private fun convert(move: com.github.bhlangonijr.chesslib.move.Move): Move {
+        return Move(convert(move.from), convert(move.to), move.promotion.pieceType?.let(::convert))
     }
 
     private fun convert(pieceType: com.github.bhlangonijr.chesslib.PieceType): PieceType {

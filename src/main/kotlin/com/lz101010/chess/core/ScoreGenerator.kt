@@ -25,7 +25,7 @@ object ScoreGenerator {
         if (PositionEvaluator.isStaleMate(board)) {
             return 0
         }
-        if (MoveGenerator.find(board).any { PositionEvaluator.isMate(board, it) }) {
+        if (MoveGenerator.find(board).any { MoveEvaluator.isMate(board, it) }) {
             return Int.MAX_VALUE
         }
         return null
