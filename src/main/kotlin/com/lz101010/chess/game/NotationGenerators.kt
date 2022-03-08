@@ -3,9 +3,10 @@
 
 package com.lz101010.chess.game
 
+import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Move
 
-internal abstract class NotationGenerator(private val printMove: (Move) -> String) {
+internal abstract class NotationGenerator(private val printMove: (Board, Move) -> String) {
     fun generate(game: Game): String {
         return game.moves
             .foldIndexed(GameState(game.initialBoard, printMove = printMove)) {
@@ -15,6 +16,6 @@ internal abstract class NotationGenerator(private val printMove: (Move) -> Strin
     }
 }
 
-internal object LanGenerator: NotationGenerator(Move::lan)
+internal object LanGenerator: NotationGenerator({ _, move -> move.lan })
 
-internal object SanGenerator: NotationGenerator(Move::san)
+internal object SanGenerator: NotationGenerator({ board, move -> "${board[move.from]!!.type.shortName}$move" })

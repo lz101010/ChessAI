@@ -13,11 +13,11 @@ internal class GameState(
     private var board: Board,
     val moves: MutableList<String> = mutableListOf(),
     private val prettyPiece: Boolean = true,
-    private val printMove: (Move) -> String
+    private val printMove: (Board, Move) -> String
 ) {
     fun move(move: Move, index: Int): GameState {
         val piece = board[move.from] ?: throw IllegalArgumentException("${move.from} is empty")
-        val movePretty = castling(board, move) ?: "${if (prettyPiece) piece.pretty else piece.basic}${printMove(move)}"
+        val movePretty = castling(board, move) ?: "${if (prettyPiece) piece.pretty else piece.basic}${printMove(board, move)}"
         val whiteToMove = index % 2 == 0
 
         board = MoveMaker.move(board, move)

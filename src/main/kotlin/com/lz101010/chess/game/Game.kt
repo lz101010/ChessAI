@@ -3,6 +3,7 @@
 
 package com.lz101010.chess.game
 
+import com.lz101010.chess.core.FenGenerator
 import com.lz101010.chess.core.MoveMaker
 import com.lz101010.chess.core.PositionEvaluator
 import com.lz101010.chess.data.Board
@@ -27,4 +28,10 @@ data class Game(
     fun isOver() = PositionEvaluator.isMate(board) || PositionEvaluator.isStaleMate(board)
 
     fun lan() = LanGenerator.generate(this)
+
+    fun fen() = FenGenerator.generate(board)
+
+    override fun toString(): String {
+        return "${moves.last()}\n$board\n"
+    }
 }
