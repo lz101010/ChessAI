@@ -64,7 +64,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
     }
 
     private fun miniMax(position: Board, depth: Int, baseAlpha: Int, baseBeta: Int, maximizingPlayer: Boolean): Int {
-        return recursionBase(position, depth) ?:
+        return recursionBase(position, depth, maximizingPlayer) ?:
 
         return if (maximizingPlayer) {
             maximize(position, depth, baseAlpha, baseBeta)
@@ -73,13 +73,14 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
         }
     }
 
-    private fun recursionBase(position: Board, depth: Int): Int? {
+    private fun recursionBase(position: Board, depth: Int, maximizingPlayer: Boolean): Int? {
         val cached = PositionCache.read(position)
         if (cached != null) {
             return cached
         }
+
         if (depth >= searchDepth || isOver(position)) {
-            val result = evaluate(position)
+            val result = if (maximizingPlayer) evaluate(position) else flip(evaluate(position))
             PositionCache.write(position, result)
             return result
         }
@@ -87,6 +88,14 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
     }
 
     private fun isOver(board: Board) = PositionEvaluator.isMate(board) || PositionEvaluator.isStaleMate(board)
+
+    private fun flip(value: Int): Int {
+        return when (value) {
+            Int.MAX_VALUE -> Int.MIN_VALUE
+            Int.MIN_VALUE -> Int.MAX_VALUE
+            else -> return -value
+        }
+    }
 
     private fun maximize(position: Board, depth: Int, baseAlpha: Int, beta: Int): Int {
         var alpha = baseAlpha
