@@ -9,10 +9,13 @@ import com.lz101010.chess.data.Move
 import com.lz101010.chess.engine.Engine
 import com.lz101010.chess.engine.abra.MoveOrder.order
 import com.lz101010.chess.engine.abra.MoveOrder.orderPositions
+import mu.KotlinLogging
 import java.lang.Integer.max
 import java.lang.Integer.min
 
 private const val MAX_SEARCH_DEPTH = 3
+private val logger = KotlinLogging.logger {}
+
 
 data class AbraEngine(val searchDepth: Int = MAX_SEARCH_DEPTH): Engine {
     override fun nextMove(board: Board): Move {
@@ -41,7 +44,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
         val evaluatedMoves = mutableListOf<EvaluatedMove>()
         var maxScore = Int.MIN_VALUE
 
-        val moveMap = moves.associateBy { MoveMaker.move(board, it) }
+        val moveMap = moves.associateBy { MoveMaker.move(board, it).copy(lastMoves = listOf("${board[it.from]!!.basic}$it")) }
 
         for (position in order(moveMap.keys)) {
             val move = moveMap[position]!!
@@ -49,11 +52,13 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
                 return Pair(Int.MAX_VALUE, listOf(move))
             }
             val score = miniMax(position, 0, Int.MIN_VALUE, Int.MAX_VALUE, false)
+            logParent(position, score)
             maxScore = max(maxScore, score)
             evaluatedMoves.add(EvaluatedMove(move, score))
         }
 
         val bestMoveCandidates = filterMax(evaluatedMoves) { it.score }
+        logRoot(bestMoveCandidates)
 
         return Pair(maxScore, bestMoveCandidates.map { it.move })
     }
@@ -89,6 +94,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
 
         for (newPosition in orderPositions(position)) {
             val score = miniMax(newPosition, depth + 1, alpha, beta, false)
+            logNode(depth, newPosition, score)
             result = max(result, score)
             alpha = max(alpha, score)
 
@@ -106,6 +112,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
 
         for (newPosition in orderPositions(position)) {
             val score = miniMax(newPosition, depth + 1, alpha, beta, true)
+            logNode(depth, newPosition, score)
             result = min(result, score)
             beta = min(beta, score)
 
@@ -115,6 +122,30 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
         }
 
         return result
+    }
+
+    private fun logRoot(bestMoveCandidates: List<EvaluatedMove>) {
+        if (searchDepth == MAX_SEARCH_DEPTH) {
+            logger.info("  moves:")
+            logger.info("  best_score: ${bestMoveCandidates.first().score}")
+            logger.info("result:")
+        }
+    }
+
+    private fun logParent(position: Board, score: Int) {
+        if (searchDepth == MAX_SEARCH_DEPTH) {
+            logger.debug("    children:")
+            logger.debug("  - ${position.lastMoves.last()}: $score")
+        }
+    }
+
+    private fun logNode(depth: Int, position: Board, score: Int) {
+        if (searchDepth == MAX_SEARCH_DEPTH) {
+            if (depth + 1 < searchDepth) {
+                logger.debug("${whitespace(depth)}    children:")
+            }
+            logger.debug("${whitespace(depth)}  - ${position.lastMoves.last()}: $score")
+        }
     }
 }
 
@@ -128,4 +159,8 @@ private fun <T> filterMax(values: Collection<T>, basedOn: (T) -> Int): List<T> {
 private fun <T> filterMin(values: Collection<T>, basedOn: (T) -> Int): List<T> {
     val max = values.minOf(basedOn)
     return values.filter { basedOn(it) == max }
+}
+
+private fun whitespace(indent: Int): String {
+    return (0..indent).joinToString("") { "  " }
 }
