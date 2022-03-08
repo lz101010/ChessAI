@@ -20,10 +20,15 @@ class PuzzleTest {
 
     @Test
     fun smotheredMate_passes() {
-        val board = BoardGenerator.fromFen("1k6/8/8/8/8/3K4/3R4/2R5 w - - 0 1")
+        val board1 = BoardGenerator.fromFen("1k6/8/8/8/8/3K4/3R4/2R5 w - - 0 1")
 
-        assertThat(AbraEngine().nextMove(board))
+        assertThat(AbraEngine().nextMove(board1))
             .isEqualTo(Move(Square.D2, Square.B2))
+
+        val board2 = BoardGenerator.fromFen("2k5/8/8/8/8/4K3/3R4/4R3 w - - 0 1")
+
+        assertThat(AbraEngine().nextMove(board2))
+            .isEqualTo(Move(Square.E1, Square.C1))
     }
 
     @Test

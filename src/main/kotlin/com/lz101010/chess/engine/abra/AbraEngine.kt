@@ -13,9 +13,9 @@ import mu.KotlinLogging
 import java.lang.Integer.max
 import java.lang.Integer.min
 
-private const val DEFAULT_SEARCH_DEPTH = 3
+private const val DEFAULT_SEARCH_DEPTH = 2
 private const val MIN_SEARCH_DEPTH = 1
-private const val MAX_SEARCH_DEPTH = 5
+private const val MAX_SEARCH_DEPTH = 3
 private val logger = KotlinLogging.logger {}
 
 
@@ -43,9 +43,11 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
         val (maxScore, bestMoves) = findBestMoveCandidates(board, moves)
 
         if (maxScore == Int.MAX_VALUE) {
-            return ShortestMate.find(board, bestMoves, searchDepth - 1)
+            // TODO: add tests for these, smth is broken
+            //return ShortestMate.find(board, bestMoves, searchDepth - 1)
         }
         if (maxScore == Int.MIN_VALUE) {
+            // TODO: add tests for these
             return LongestMate.find(board, bestMoves, searchDepth - 1)
         }
 
@@ -67,7 +69,6 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
             logParent(position, score)
             maxScore = max(maxScore, score)
             evaluatedMoves.add(EvaluatedMove(move, score))
-            // TODO: "ensure" that searchDepth is effectively always odd (e.g. only increase depth in minimize block)
         }
 
         val bestMoveCandidates = filterMax(evaluatedMoves) { it.score }
@@ -133,7 +134,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
         var result = Int.MAX_VALUE
 
         for (newPosition in orderPositions(position)) {
-            val score = miniMax(newPosition, depth + 1, alpha, beta, true)
+            val score = miniMax(newPosition, depth, alpha, beta, true)
             logNode(depth, newPosition, score)
             result = min(result, score)
             beta = min(beta, score)
