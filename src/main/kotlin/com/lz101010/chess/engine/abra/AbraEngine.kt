@@ -13,20 +13,32 @@ import mu.KotlinLogging
 import java.lang.Integer.max
 import java.lang.Integer.min
 
-private const val MAX_SEARCH_DEPTH = 3
+private const val DEFAULT_SEARCH_DEPTH = 3
+private const val MIN_SEARCH_DEPTH = 1
+private const val MAX_SEARCH_DEPTH = 5
 private val logger = KotlinLogging.logger {}
 
 
-data class AbraEngine(val searchDepth: Int = MAX_SEARCH_DEPTH): Engine {
+data class AbraEngine(val searchDepth: Int = DEFAULT_SEARCH_DEPTH, val log: Boolean = false): Engine {
     override fun nextMove(board: Board): Move {
         val allMoves = MoveGenerator.find(board)
-        val bestPieceMoves = MiniMax(max(1, searchDepth), ScoreGenerator::simple).findBestMoves(board, allMoves)
+        val bestPieceMoves = MiniMax(limit(searchDepth), ScoreGenerator::simple, log).findBestMoves(board, allMoves)
         val bestPositionalMoves = filterMin(bestPieceMoves) { ScoreGenerator.positional(MoveMaker.move(board, it)) }
         return bestPositionalMoves.random()
     }
 }
 
-private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
+private fun limit(searchDepth: Int): Int {
+    if (searchDepth < MIN_SEARCH_DEPTH) {
+        return MIN_SEARCH_DEPTH
+    }
+    if (searchDepth > MAX_SEARCH_DEPTH) {
+        return MAX_SEARCH_DEPTH
+    }
+    return searchDepth
+}
+
+private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, val log: Boolean) {
     fun findBestMoves(board: Board, moves: List<Move>): List<Move> {
         val (maxScore, bestMoves) = findBestMoveCandidates(board, moves)
 
@@ -135,7 +147,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
     }
 
     private fun logRoot(bestMoveCandidates: List<EvaluatedMove>) {
-        if (searchDepth == MAX_SEARCH_DEPTH) {
+        if (log) {
             logger.info("  moves:")
             logger.info("  best_score: ${bestMoveCandidates.first().score}")
             logger.info("result:")
@@ -143,14 +155,14 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
     }
 
     private fun logParent(position: Board, score: Int) {
-        if (searchDepth == MAX_SEARCH_DEPTH) {
+        if (log) {
             logger.debug("    children:")
             logger.debug("  - ${position.lastMoves.last()}: $score")
         }
     }
 
     private fun logNode(depth: Int, position: Board, score: Int) {
-        if (searchDepth == MAX_SEARCH_DEPTH) {
+        if (log) {
             if (depth + 1 < searchDepth) {
                 logger.debug("${whitespace(depth)}    children:")
             }
