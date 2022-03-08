@@ -55,6 +55,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int) {
             logParent(position, score)
             maxScore = max(maxScore, score)
             evaluatedMoves.add(EvaluatedMove(move, score))
+            // TODO: "ensure" that searchDepth is effectively always odd (e.g. only increase depth in minimize block)
         }
 
         val bestMoveCandidates = filterMax(evaluatedMoves) { it.score }
