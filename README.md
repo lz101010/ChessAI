@@ -11,8 +11,8 @@ This project is mostly for fun and doesn't take itself too seriously. For instan
 
 # Scope
 Some planned features are:
-- all moves start with e4
-- input: long algebraic notation, output: next move (semi-deterministic)
+- all games start with e4
+- input: board in FEN format, output: next move in long algebraic notation (semi-deterministic)
 - opening book (borrowing from publicly available resources)
 - endgame tablebases (borrowing from public APIs such as lichess)
 - search depth of 5-6 half moves
