@@ -19,6 +19,7 @@ private const val MAX_SEARCH_DEPTH = 6
 private val logger = KotlinLogging.logger {}
 
 
+// TODO: move logging to application.yml + separate file
 data class AbraEngine(val searchDepth: Int = DEFAULT_SEARCH_DEPTH, val log: Boolean = false): Engine {
     override fun nextMove(board: Board): Move {
         val allMoves = MoveGenerator.find(board)
@@ -60,6 +61,7 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
 
         val moveMap = moves.associateBy { MoveMaker.move(board, it).copy(lastMoves = listOf("${board[it.from]!!.basic}$it")) }
 
+        // TODO: parallelize
         for (position in order(moveMap.keys)) {
             val move = moveMap[position]!!
             if (PositionEvaluator.isMate(position)) {
@@ -172,7 +174,8 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
     }
 }
 
-internal data class Score(val value: Int, val depth: Int)
+// TODO: add line
+internal data class Score(val value: Int, val depth: Int, val line: String = "")
 internal data class EvaluatedMove(val move: Move, val score: Score)
 
 private fun <T> filterMax(values: Collection<T>, basedOn: (T) -> Int): List<T> {

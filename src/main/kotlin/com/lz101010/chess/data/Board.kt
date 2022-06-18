@@ -34,6 +34,10 @@ private val EMPTY_BOARD_LAYOUT = arrayOf(
     arrayOfNulls<Piece?>(8)
 )
 
+// TODO: adapt Board.hashCode() + Board.equals()
+//  - nextMove doesn't really matter
+//  - plies don't matter much either
+//  - refactor castling options to not need .sorted()
 data class Board(
     val pieces: Array<Array<Piece?>> = INITIAL_BOARD_LAYOUT,
     val whiteToMove: Boolean = true,
