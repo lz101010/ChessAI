@@ -16,7 +16,12 @@ internal object MoveOrder {
 
     fun order(positions: Collection<Board>): List<Board> {
         return positions.sortedBy { position ->
-            if (PositionEvaluator.isCheck(position)) 0 else 1
+            when (PositionEvaluator.evaluate(position)) {
+                PositionEvaluator.Event.MATE -> 0
+                PositionEvaluator.Event.CHECK -> 1
+                PositionEvaluator.Event.NONE -> 2
+                PositionEvaluator.Event.STALE_MATE -> 3
+            }
         }
     }
 }
