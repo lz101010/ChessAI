@@ -45,6 +45,13 @@ class PuzzleTest {
     }
 
     @Test
+    fun findMate_passes() {
+        val board = BoardGenerator.fromFen("k7/6Q1/2K5/8/8/8/8/8 w - - 0 1")
+
+        assertThat(AbraEngine().nextMove(board)).isEqualTo(Move(Square.G7, Square.B7))
+    }
+
+    @Test
     fun avoidBlunderingMate_passes() {
         val board = BoardGenerator.fromFen("2k5/8/3K4/8/8/8/8/6Q1 w - - 0 1")
 
