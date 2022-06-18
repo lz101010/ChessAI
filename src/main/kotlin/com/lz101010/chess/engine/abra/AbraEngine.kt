@@ -13,9 +13,9 @@ import mu.KotlinLogging
 import java.lang.Integer.max
 import java.lang.Integer.min
 
-private const val DEFAULT_SEARCH_DEPTH = 2
+private const val DEFAULT_SEARCH_DEPTH = 4
 private const val MIN_SEARCH_DEPTH = 1
-private const val MAX_SEARCH_DEPTH = 3
+private const val MAX_SEARCH_DEPTH = 6
 private val logger = KotlinLogging.logger {}
 
 
@@ -40,30 +40,30 @@ private fun limit(searchDepth: Int): Int {
 
 private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, val log: Boolean) {
     fun findBestMoves(board: Board, moves: List<Move>): List<Move> {
-        val (maxScore, bestMoves) = findBestMoveCandidates(board, moves)
+        val bestMoves = findBestMoveCandidates(board, moves)
 
-        if (maxScore == Int.MAX_VALUE) {
-            // TODO: add tests for these, smth is broken
-            //return ShortestMate.find(board, bestMoves, searchDepth - 1)
+        val maxScoreValue = bestMoves.maxByOrNull { it.score.value }?.score?.value ?: Int.MIN_VALUE
+
+        if (maxScoreValue == Int.MAX_VALUE) {
+            return filterMin(bestMoves) { it.score.depth }.map { it.move }
         }
-        if (maxScore == Int.MIN_VALUE) {
-            // TODO: add tests for these
-            return LongestMate.find(board, bestMoves, searchDepth - 1)
+        if (maxScoreValue == Int.MIN_VALUE) {
+            return filterMax(bestMoves) { it.score.depth }.map { it.move }
         }
 
-        return bestMoves
+        return bestMoves.map { it.move }
     }
 
-    private fun findBestMoveCandidates(board: Board, moves: List<Move>): Pair<Int, List<Move>> {
+    private fun findBestMoveCandidates(board: Board, moves: List<Move>): List<EvaluatedMove> {
         val evaluatedMoves = mutableListOf<EvaluatedMove>()
-        var maxScore = Int.MIN_VALUE
+        var maxScore = Score(Int.MIN_VALUE, -1)
 
         val moveMap = moves.associateBy { MoveMaker.move(board, it).copy(lastMoves = listOf("${board[it.from]!!.basic}$it")) }
 
         for (position in order(moveMap.keys)) {
             val move = moveMap[position]!!
             if (PositionEvaluator.isMate(position)) {
-                return Pair(Int.MAX_VALUE, listOf(move))
+                return listOf(EvaluatedMove(move, Score(Int.MAX_VALUE, 0)))
             }
             val score = miniMax(position, 0, Int.MIN_VALUE, Int.MAX_VALUE, false)
             logParent(position, score)
@@ -71,32 +71,34 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
             evaluatedMoves.add(EvaluatedMove(move, score))
         }
 
-        val bestMoveCandidates = filterMax(evaluatedMoves) { it.score }
+        val bestMoveCandidates = filterMax(evaluatedMoves) { it.score.value }
         logRoot(bestMoveCandidates)
 
-        return Pair(maxScore, bestMoveCandidates.map { it.move })
+        println(bestMoveCandidates)
+
+        return bestMoveCandidates
     }
 
-    private fun miniMax(position: Board, depth: Int, baseAlpha: Int, baseBeta: Int, maximizingPlayer: Boolean): Int {
-        return recursionBase(position, depth, maximizingPlayer) ?:
+    private fun miniMax(position: Board, depth: Int, baseAlpha: Int, baseBeta: Int, maximizingPlayerNext: Boolean): Score {
+        return recursionBase(position, depth, !maximizingPlayerNext) ?:
 
-        return if (maximizingPlayer) {
+        return if (maximizingPlayerNext) {
             maximize(position, depth, baseAlpha, baseBeta)
         } else {
             minimize(position, depth, baseAlpha, baseBeta)
         }
     }
 
-    private fun recursionBase(position: Board, depth: Int, maximizingPlayer: Boolean): Int? {
+    private fun recursionBase(position: Board, depth: Int, maximizingPlayer: Boolean): Score? {
         val cached = PositionCache.read(position)
         if (cached != null) {
-            return cached
+            return Score(cached, depth)
         }
 
         if (depth >= searchDepth || isOver(position)) {
-            val result = if (maximizingPlayer) evaluate(position) else flip(evaluate(position))
+            val result = if (!maximizingPlayer) evaluate(position) else flip(evaluate(position))
             PositionCache.write(position, result)
-            return result
+            return Score(result, depth)
         }
         return null
     }
@@ -111,15 +113,15 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
         }
     }
 
-    private fun maximize(position: Board, depth: Int, baseAlpha: Int, beta: Int): Int {
+    private fun maximize(position: Board, depth: Int, baseAlpha: Int, beta: Int): Score {
         var alpha = baseAlpha
-        var result = Int.MIN_VALUE
+        var result = Score(Int.MIN_VALUE, Int.MAX_VALUE)
 
         for (newPosition in orderPositions(position)) {
             val score = miniMax(newPosition, depth + 1, alpha, beta, false)
-            logNode(depth, newPosition, score)
-            result = max(result, score)
-            alpha = max(alpha, score)
+            logNode(depth, newPosition, score, "//${max(score, result)}")
+            result = max(score, result)
+            alpha = max(alpha, score.value)
 
             if (beta <= alpha) {
                 return result
@@ -129,15 +131,15 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
         return result
     }
 
-    private fun minimize(position: Board, depth: Int, alpha: Int, baseBeta: Int): Int {
+    private fun minimize(position: Board, depth: Int, alpha: Int, baseBeta: Int): Score {
         var beta = baseBeta
-        var result = Int.MAX_VALUE
+        var result = Score(Int.MAX_VALUE, Int.MIN_VALUE)
 
         for (newPosition in orderPositions(position)) {
-            val score = miniMax(newPosition, depth, alpha, beta, true)
-            logNode(depth, newPosition, score)
-            result = min(result, score)
-            beta = min(beta, score)
+            val score = miniMax(newPosition, depth + 1, alpha, beta, true)
+            logNode(depth, newPosition, score, "..${min(score, result)}")
+            result = min(score, result)
+            beta = min(beta, score.value)
 
             if (beta <= alpha) {
                 return result
@@ -155,24 +157,25 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
         }
     }
 
-    private fun logParent(position: Board, score: Int) {
+    private fun logParent(position: Board, score: Score) {
         if (log) {
             logger.debug("    children:")
             logger.debug("  - ${position.lastMoves.last()}: $score")
         }
     }
 
-    private fun logNode(depth: Int, position: Board, score: Int) {
+    private fun logNode(depth: Int, position: Board, score: Score, detail: String = "") {
         if (log) {
             if (depth + 1 < searchDepth) {
                 logger.debug("${whitespace(depth)}    children:")
             }
-            logger.debug("${whitespace(depth)}  - ${position.lastMoves.last()}: $score")
+            logger.debug("${whitespace(depth)}  - ${position.lastMoves.last()}: $score $detail")
         }
     }
 }
 
-internal data class EvaluatedMove(val move: Move, val score: Int)
+internal data class Score(val value: Int, val depth: Int)
+internal data class EvaluatedMove(val move: Move, val score: Score)
 
 private fun <T> filterMax(values: Collection<T>, basedOn: (T) -> Int): List<T> {
     val max = values.maxOf(basedOn)
@@ -180,10 +183,26 @@ private fun <T> filterMax(values: Collection<T>, basedOn: (T) -> Int): List<T> {
 }
 
 private fun <T> filterMin(values: Collection<T>, basedOn: (T) -> Int): List<T> {
-    val max = values.minOf(basedOn)
-    return values.filter { basedOn(it) == max }
+    val min = values.minOf(basedOn)
+    return values.filter { basedOn(it) == min }
 }
 
 private fun whitespace(indent: Int): String {
     return (0..indent).joinToString("") { "  " }
+}
+
+private fun max(score1: Score, score2: Score): Score {
+    return if (score1.value == score2.value) {
+        if (score1.depth < score2.depth) score1 else score2
+    } else {
+        if (score1.value > score2.value) score1 else score2
+    }
+}
+
+private fun min(score1: Score, score2: Score): Score {
+    return if (score1.value == score2.value) {
+        if (score1.depth > score2.depth) score1 else score2
+    } else {
+        if (score1.value < score2.value) score1 else score2
+    }
 }
