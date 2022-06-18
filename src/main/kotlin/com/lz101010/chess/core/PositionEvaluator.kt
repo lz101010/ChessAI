@@ -15,17 +15,12 @@ object PositionEvaluator {
 
     fun evaluate(board: Board): Event {
         if (isCheck(board)) {
-            return if (noMovesLeft(board)) Event.MATE else Event.CHECK
+            return if (isOver(board)) Event.MATE else Event.CHECK
         }
-        if (noMovesLeft(board) || board.plies > 100u) {
+        if (isOver(board) || board.plies > 100u) {
             return Event.STALE_MATE
         }
         return Event.NONE
-    }
-
-    fun isOver(board: Board): Boolean {
-        val event = evaluate(board)
-        return event == Event.MATE || event == Event.STALE_MATE
     }
 
     fun isMate(board: Board): Boolean = evaluate(board) == Event.MATE
@@ -40,5 +35,5 @@ object PositionEvaluator {
         return attackedSquares.contains(target)
     }
 
-    private fun noMovesLeft(board: Board) = MoveGenerator.find(board).isEmpty()
+    fun isOver(board: Board) = MoveGenerator.find(board).isEmpty()
 }

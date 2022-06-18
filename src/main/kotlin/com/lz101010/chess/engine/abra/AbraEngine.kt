@@ -95,15 +95,13 @@ private data class MiniMax(val searchDepth: Int, val evaluate: (Board) -> Int, v
             return Score(cached, depth)
         }
 
-        if (depth >= searchDepth || isOver(position)) {
+        if (depth >= searchDepth || PositionEvaluator.isOver(position)) {
             val result = if (!maximizingPlayer) evaluate(position) else flip(evaluate(position))
             PositionCache.write(position, result)
             return Score(result, depth)
         }
         return null
     }
-
-    private fun isOver(board: Board) = PositionEvaluator.isMate(board) || PositionEvaluator.isStaleMate(board)
 
     private fun flip(value: Int): Int {
         return when (value) {
