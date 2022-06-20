@@ -7,6 +7,9 @@ import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Piece
 import com.lz101010.chess.data.PieceType
 import com.lz101010.chess.data.Square
+import com.lz101010.chess.moves.MoveEvaluator
+import com.lz101010.chess.moves.MoveGenerator
+import com.lz101010.chess.moves.PositionEvaluator
 import com.lz101010.chess.util.ArrayManipulation.rotate
 
 object ScoreGenerator {

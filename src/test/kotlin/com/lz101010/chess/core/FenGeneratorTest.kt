@@ -4,6 +4,7 @@
 package com.lz101010.chess.core
 
 import com.lz101010.chess.data.*
+import com.lz101010.chess.moves.MoveMaker
 import com.lz101010.chess.support.OpeningMoves
 import com.lz101010.chess.support.move
 import org.assertj.core.api.Assertions.assertThat

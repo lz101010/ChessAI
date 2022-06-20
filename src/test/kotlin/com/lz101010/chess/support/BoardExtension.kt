@@ -3,7 +3,7 @@
 
 package com.lz101010.chess.support
 
-import com.lz101010.chess.core.MoveMaker
+import com.lz101010.chess.moves.MoveMaker
 import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Move
 

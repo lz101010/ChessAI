@@ -9,7 +9,7 @@ import com.lz101010.chess.data.PieceType.B
 import com.lz101010.chess.data.PieceType.P
 import com.lz101010.chess.data.PieceType.Q
 import com.lz101010.chess.data.PieceType.K
-import java.util.*
+import java.util.Objects
 import java.util.EnumSet.allOf
 
 private val INITIAL_BOARD_LAYOUT = arrayOf(

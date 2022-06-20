@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.core
+package com.lz101010.chess.moves
 
+import com.lz101010.chess.core.FenGenerator
 import com.lz101010.chess.data.*
 
 object MoveGenerator {
@@ -12,11 +13,11 @@ object MoveGenerator {
 
         val moves = com.github.bhlangonijr.chesslib.move.MoveGenerator.generateLegalMoves(mappedBoard)
 
-        return moves.map(::convert)
+        return moves.map(MoveGenerator::convert)
     }
 
     private fun convert(move: com.github.bhlangonijr.chesslib.move.Move): Move {
-        return Move(convert(move.from), convert(move.to), move.promotion.pieceType?.let(::convert))
+        return Move(convert(move.from), convert(move.to), move.promotion.pieceType?.let(MoveGenerator::convert))
     }
 
     private fun convert(pieceType: com.github.bhlangonijr.chesslib.PieceType): PieceType {
