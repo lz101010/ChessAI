@@ -3,7 +3,7 @@
 
 package com.lz101010.chess.moves
 
-import com.lz101010.chess.core.FenGenerator
+import com.lz101010.chess.notation.FenGenerator
 import com.lz101010.chess.data.*
 
 object MoveGenerator {

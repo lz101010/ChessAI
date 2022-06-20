@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.core
+package com.lz101010.chess.notation
 
 import com.lz101010.chess.data.Board
 
@@ -14,7 +14,7 @@ object FenGenerator {
         return board.toString()
             .replace(" ", "")
             .split("\n")
-            .joinToString("/", transform = ::normalizeEmptyFields)
+            .joinToString("/", transform = FenGenerator::normalizeEmptyFields)
     }
 
     private fun normalizeEmptyFields(rank: String): String {
