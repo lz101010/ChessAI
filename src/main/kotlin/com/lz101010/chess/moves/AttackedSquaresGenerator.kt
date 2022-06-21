@@ -32,18 +32,18 @@ object AttackedSquaresGenerator {
     }
 
     private fun attackedBy(piece: Piece, square: Square, board: Board): List<Square> {
-        return AttackPatternGenerator.generate(piece.type).attackMoves.map {
+        return AttackSetGenerator.generate(piece.type).attackPatterns.map {
             attackedBy(it, piece.white, square, board)
         }.flatten()
     }
 
-    private fun attackedBy(attackMove: AttackMove, whiteAttacking: Boolean, square: Square, board: Board): List<Square> {
-        val attackedSquare = evaluate(square, attackMove.deltaX, attackMove.deltaY, whiteAttacking) ?: return listOf()
+    private fun attackedBy(attackPattern: AttackPattern, whiteAttacking: Boolean, square: Square, board: Board): List<Square> {
+        val attackedSquare = evaluate(square, attackPattern.deltaX, attackPattern.deltaY, whiteAttacking) ?: return listOf()
         val attackedPiece = board[attackedSquare]
 
-        return if (attackMove.repeat) {
+        return if (attackPattern.repeat) {
             when {
-                attackedPiece == null -> listOf(listOf(attackedSquare), attackedBy(attackMove, whiteAttacking, attackedSquare, board)).flatten()
+                attackedPiece == null -> listOf(listOf(attackedSquare), attackedBy(attackPattern, whiteAttacking, attackedSquare, board)).flatten()
                 attackedPiece.white != whiteAttacking -> listOf(attackedSquare)
                 else -> listOf()
             }

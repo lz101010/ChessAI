@@ -7,10 +7,24 @@ import com.lz101010.chess.data.*
 import kotlin.math.abs
 
 object MoveMaker {
+    private val reversedRanks = Rank.values().reversed()
+
+    fun simpleMove(board: Board, move: Move): Board {
+        val movedPiece = board[move.from]!!
+        val isEnPassant = isEnPassant(board, move, movedPiece)
+        val pieces = reversedRanks.map { rank ->
+            File.values().map { file ->
+                piece(move, file, rank, isEnPassant, board[file, rank], movedPiece)
+            }.toTypedArray()
+        }.toTypedArray()
+
+        return Board(pieces = pieces, whiteToMove = !board.whiteToMove)
+    }
+
     fun move(board: Board, move: Move): Board {
         val movedPiece = validate(board, move)
         val isEnPassant = isEnPassant(board, move, movedPiece)
-        val pieces = Rank.values().reversed().map { rank ->
+        val pieces = reversedRanks.map { rank ->
             File.values().map { file ->
                 piece(move, file, rank, isEnPassant, board[file, rank], movedPiece)
             }.toTypedArray()

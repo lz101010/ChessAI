@@ -44,4 +44,9 @@ enum class Square {
                 A8, B8, C8, D8, E8, F8, G8, H8 -> Rank.RANK_8
             }
         }
+
+    companion object {
+        private val intMap = values().associateBy { it.ordinal }
+        fun find(ordinal: Int): Square? = intMap[ordinal]
+    }
 }
