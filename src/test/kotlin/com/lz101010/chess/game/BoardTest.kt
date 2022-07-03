@@ -1,8 +1,8 @@
-// SPDX-License-Identifier: MIT
-// Copyright (c) 2022 Lukas Zeller
+package com.lz101010.chess.game
 
-package com.lz101010.chess.data
-
+import com.lz101010.chess.data.CastlingOption
+import com.lz101010.chess.data.EnPassantOption
+import com.lz101010.chess.data.PieceType
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -3,8 +3,8 @@
 
 package com.lz101010.chess.support
 
-import com.lz101010.chess.data.Move
 import com.lz101010.chess.data.Square
+import com.lz101010.chess.game.Move
 
 object OpeningMoves {
     val A3 = Move(Square.A2, Square.A3)

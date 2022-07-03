@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.core
-import com.lz101010.chess.data.Board
-import com.lz101010.chess.data.Move
+package com.lz101010.chess.game
+
 import com.lz101010.chess.data.Square
 import org.assertj.core.api.Assertions.assertThat
-
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource

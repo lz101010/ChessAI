@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.core
-
-import com.lz101010.chess.data.Board
+package com.lz101010.chess.game
 
 object FenGenerator {
     fun generate(board: Board): String {

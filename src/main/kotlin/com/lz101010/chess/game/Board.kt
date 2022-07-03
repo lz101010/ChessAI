@@ -1,14 +1,7 @@
-// SPDX-License-Identifier: MIT
-// Copyright (c) 2022 Lukas Zeller
+package com.lz101010.chess.game
 
-package com.lz101010.chess.data
-
-import com.lz101010.chess.data.PieceType.R
-import com.lz101010.chess.data.PieceType.N
-import com.lz101010.chess.data.PieceType.B
-import com.lz101010.chess.data.PieceType.P
-import com.lz101010.chess.data.PieceType.Q
-import com.lz101010.chess.data.PieceType.K
+import com.lz101010.chess.data.*
+import com.lz101010.chess.data.PieceType.*
 import java.util.*
 import java.util.EnumSet.allOf
 

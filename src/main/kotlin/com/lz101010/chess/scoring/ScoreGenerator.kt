@@ -1,12 +1,15 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.core
+package com.lz101010.chess.scoring
 
-import com.lz101010.chess.data.Board
 import com.lz101010.chess.data.Piece
 import com.lz101010.chess.data.PieceType
 import com.lz101010.chess.data.Square
+import com.lz101010.chess.game.Board
+import com.lz101010.chess.game.MoveEvaluator
+import com.lz101010.chess.game.MoveGenerator
+import com.lz101010.chess.game.PositionEvaluator
 import com.lz101010.chess.util.ArrayManipulation.rotate
 
 object ScoreGenerator {

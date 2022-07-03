@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (c) 2022 Lukas Zeller
 
-package com.lz101010.chess.core
+package com.lz101010.chess.game
 
 import com.lz101010.chess.data.*
 import kotlin.math.abs
