@@ -81,6 +81,13 @@ class PositionalScoreGeneratorTest {
         assertThat(score("k7/6PK/8/8/8/8/8/8 w - - 0 1")).isEqualTo(70)
         assertThat(score("K7/5bbk/8/8/8/8/8/8 w - - 0 1")).isEqualTo(-25)
         assertThat(score("k7/5BBK/8/8/8/8/8/8 w - - 0 1")).isEqualTo(20)
+        assertThat(score("8/8/K2P3k/8/8/8/8/8 w - - 0 1")).isEqualTo(30)
+    }
+
+    @Test
+    fun midgameBoards_passes() {
+        assertThat(score("rn2kb1r/ppp2p1p/2q4B/1B1NP1p1/4P3/7P/PPP2P1P/R2QK1NR b KQkq - 1 8")).isEqualTo(-65)
+        assertThat(score("rn2kb1r/ppN2p1p/2q4B/4P1p1/4P3/7P/PPP2P1P/R2QKBNR b KQkq - 0 8")).isEqualTo(-40)
     }
 
     private fun score(fen: String): Int {

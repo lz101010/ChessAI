@@ -6,23 +6,34 @@ package com.lz101010.chess.core
 import com.lz101010.chess.data.*
 
 object PositionEvaluator {
-    fun isMate(board: Board): Boolean {
-        return isCheck(board) && noMovesLeft(board)
+    enum class Event {
+        NONE,
+        CHECK,
+        MATE,
+        STALE_MATE
     }
 
-    fun isStaleMate(board: Board): Boolean {
-        return !isCheck(board) && noMovesLeft(board)
+    fun evaluate(board: Board): Event {
+        if (isCheck(board)) {
+            return if (isOver(board)) Event.MATE else Event.CHECK
+        }
+        if (isOver(board) || board.plies > 100u) {
+            return Event.STALE_MATE
+        }
+        return Event.NONE
     }
+
+    fun isMate(board: Board): Boolean = evaluate(board) == Event.MATE
+
+    fun isStaleMate(board: Board): Boolean = evaluate(board) == Event.STALE_MATE
 
     fun isCheck(board: Board): Boolean {
-        val target = find(Piece(PieceType.K, board.whiteToMove), board).first()
+        val target = Square.values().first { board[it] == Piece(PieceType.K, board.whiteToMove) }
 
         val attackedSquares = AttackedSquaresGenerator.generate(board)
 
         return attackedSquares.contains(target)
     }
 
-    private fun find(piece: Piece, board: Board): List<Square> = Square.values().filter { board[it] == piece }
-
-    private fun noMovesLeft(board: Board) = MoveGenerator.find(board).isEmpty()
+    fun isOver(board: Board) = MoveGenerator.find(board).isEmpty()
 }
